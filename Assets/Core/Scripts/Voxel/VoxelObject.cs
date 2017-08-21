@@ -1,16 +1,30 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class VoxelObject : MonoBehaviour {
+namespace Warfest {
+	[RequireComponent(typeof(MeshFilter))]
+	[RequireComponent(typeof(MeshRenderer))]
+	[RequireComponent(typeof(MeshCollider))]
+	public class VoxelObject : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+		public int sizeX;
+		public int sizeY;
+		public int sizeZ;
+
+		Chunk chunk;
+		MeshFilter meshFilter;
+		MeshCollider meshCollider;
+
+		void Start() {
+			meshFilter = GetComponent<MeshFilter>();
+			meshCollider = GetComponent<MeshCollider>();
+
+			chunk = new Chunk(sizeX, sizeY, sizeZ);
+			chunk.SetVoxel(0, 0, 0, Voxel.Type.Solid);
+			chunk.SetVoxel(1, 0, 0, Voxel.Type.Solid);
+
+			MeshData meshData = VoxelMeshBuilder.BuildMesh(chunk);
+			VoxelMeshBuilder.RenderMesh(meshData, meshFilter, meshCollider);
+		}
+
 	}
 }
