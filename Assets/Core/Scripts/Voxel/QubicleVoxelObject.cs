@@ -17,6 +17,7 @@ namespace Warfest {
 		MeshRenderer meshRenderer;
 		ColorTexture colorTexture;
 		VoxelMeshBuilder voxelMeshBuilder;
+		ChunkSimplifier chunkSimplifier;
 
 		void Start() {
 			meshFilter = GetComponent<MeshFilter>();
@@ -24,6 +25,7 @@ namespace Warfest {
 			meshRenderer = GetComponent<MeshRenderer>();
 			colorTexture = GameManager.Instance.GetColorTexture();
 			voxelMeshBuilder = GameManager.Instance.GetVoxelMeshBuilder();
+			chunkSimplifier = GameObject.Find("/Managers/ChunkSimplifier").GetComponent<ChunkSimplifier>();
 
 			QBTFile qbtFile = LoadQubicleFile();
 			QBTFile.VoxelData[,,] qbtData = qbtFile.VoxelsData;
@@ -46,12 +48,17 @@ namespace Warfest {
 			}
 
 			meshRenderer.sharedMaterial.mainTexture = colorTexture.Texture;
-			MeshData meshData = voxelMeshBuilder.BuildMesh(chunk);
-			voxelMeshBuilder.RenderMesh(meshData, meshFilter, meshCollider);
+
+//			MeshData meshData = voxelMeshBuilder.BuildMesh(chunk);
+//			voxelMeshBuilder.RenderMesh(meshData, meshFilter, meshCollider);
+
+			MeshData meshData = chunkSimplifier.BuildMesh(chunk);
+			chunkSimplifier.RenderMesh(meshData, meshFilter, meshCollider);
+
 		}
 
 		QBTFile LoadQubicleFile() {
-			string qbtPath = GameConfig.Instance.GetModelsPath() + "/Deer.qbt";
+			string qbtPath = GameConfig.Instance.GetModelsPath() + "/Test.qbt";
 
 			Debug.Log("Path: " + qbtPath);
 

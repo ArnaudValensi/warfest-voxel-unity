@@ -1,0 +1,185 @@
+﻿using UnityEngine;
+using System.Collections.Generic;
+
+namespace Warfest {
+	public class ChunkSimplifier : MonoBehaviour {
+
+		readonly Vector2 endPos = new Vector2(-1, -1);
+
+		public MeshData BuildMesh(Chunk chunk) {
+			MeshData meshData = new MeshData();
+			HashSet<Vector2> usedPos = new HashSet<Vector2>();
+			List<VoxelRect> rectangles = new List<VoxelRect>();
+
+			int lineSize = 0;
+			int compatibleLines = 0;
+			Vector2 pos = new Vector2(0f, 0f);
+
+			int loopCount = 0;
+
+			pos = GetNextPos(usedPos, pos, chunk);
+			while (pos != endPos && loopCount < 2000) {
+				Voxel currentVoxel = chunk.GetVoxel((int)pos.x, (int)pos.y, 0);
+
+				lineSize = GetSimilarVoxelCountNextToThisPos(pos, currentVoxel.color, chunk, usedPos);
+
+				compatibleLines = GetCompatibleLines(pos, currentVoxel.color, chunk, lineSize, usedPos);
+
+				VoxelRect rect = new VoxelRect(pos.x, pos.y, lineSize, compatibleLines);
+				rectangles.Add(rect);
+
+				SetUsedPos(usedPos, rect);
+
+				Debug.LogFormat("pos: {0}, lineSize: {1}, compatibleLines: {2}", pos, lineSize, compatibleLines);
+
+				pos = GetNextPos(usedPos, pos, chunk);
+
+				loopCount++;
+			}
+
+			BuildRectangleMeshed(rectangles, meshData);
+
+			return meshData;
+
+		}
+
+		Vector2 GetNextPos(HashSet<Vector2> usedPos, Vector2 pos, Chunk chunk) {
+			int x = (int)pos.x;
+
+			for (int y = (int)pos.y; y < chunk.SizeY; y++) {
+				for (; x < chunk.SizeX; x++) {
+					Vector2 currentPos = new Vector2(x, y);
+
+					if (!usedPos.Contains(currentPos) && chunk.GetVoxel(x, y, 0).IsSolid) {
+						return currentPos;
+					}
+				}
+
+				x = 0;
+			}
+
+			return endPos;
+		}
+
+		int GetSimilarVoxelCountNextToThisPos(Vector2 pos, Color32 color, Chunk chunk, HashSet<Vector2> usedPos) {
+			int count = 1;
+
+			for (int x = (int)pos.x + 1; x < chunk.SizeX; x++) {
+				if (usedPos.Contains(new Vector2(x, pos.y)) || !chunk.GetVoxel(x, (int)pos.y, 0).color.Equals(color)) {
+					return count;
+				}
+
+				count++;
+			}
+
+			return count;
+		}
+
+		bool IsLineCompatible(Vector2 pos, int lineSize, Color32 color, Chunk chunk, HashSet<Vector2> usedPos) {
+			int count = 0;
+
+			for (int x = (int)pos.x; x < chunk.SizeX && count < lineSize; x++) {
+				if (!usedPos.Contains(new Vector2(x, pos.y)) && chunk.GetVoxel(x, (int)pos.y, 0).color.Equals(color)) {
+					count++;
+				} else {
+					return false;
+				}
+			}
+
+			return count == lineSize;
+		}
+
+		int GetCompatibleLines(Vector2 pos, Color32 color, Chunk chunk, int lineSize, HashSet<Vector2> usedPos) {
+			int count = 1;
+
+			for (int y = (int)pos.y + 1; y < chunk.SizeY; y++) {
+				if (!IsLineCompatible(new Vector2(pos.x, y), lineSize, color, chunk, usedPos)) {
+					return count;
+				}
+
+				count++;
+			}
+
+			return count;
+		}
+
+		void SetUsedPos(HashSet<Vector2> usedPos, VoxelRect rect) {
+			for (int y = (int)rect.y; y < (int)rect.y + (int)rect.height; y++) {
+				for (int x = (int)rect.x; x < (int)rect.x + (int)rect.width; x++) {
+					usedPos.Add(
+						new Vector2(x, y)
+					);
+				}
+			}
+		}
+
+		void BuildRectangleMeshed(List<VoxelRect> rectangles, MeshData meshData) {
+			foreach (var rect in rectangles) {
+				CreateVertexFace(meshData, rect);
+				AddQuadTriangles(meshData);
+			}
+		}
+
+		void CreateVertexFace(MeshData meshData, VoxelRect rect) {
+			var vertices = meshData.vertices;
+			float startX = rect.x;
+			float startY = rect.y;
+			float endX = rect.x + rect.width - 1;
+			float endY = rect.y + rect.height - 1;
+
+			vertices.Add(new Vector3(startX - 0.5f, startY - 0.5f, 0f - 0.5f));
+			vertices.Add(new Vector3(startX - 0.5f, endY   + 0.5f, 0f - 0.5f));
+			vertices.Add(new Vector3(endX   + 0.5f, endY   + 0.5f, 0f - 0.5f));
+			vertices.Add(new Vector3(endX   + 0.5f, startY - 0.5f, 0f - 0.5f));
+		}
+
+		void AddQuadTriangles(MeshData meshData) {
+			var triangles = meshData.triangles;
+			var vertices = meshData.vertices;
+
+			triangles.Add(vertices.Count - 4);
+			triangles.Add(vertices.Count - 3);
+			triangles.Add(vertices.Count - 2);
+
+			triangles.Add(vertices.Count - 4);
+			triangles.Add(vertices.Count - 2);
+			triangles.Add(vertices.Count - 1);
+		}
+
+		public Mesh RenderMesh(MeshData meshData, MeshFilter filter, MeshCollider coll) {
+			MeshData data = (MeshData)meshData;
+
+			filter.mesh.Clear();
+			filter.mesh.vertices = data.vertices.ToArray();
+			filter.mesh.triangles = data.triangles.ToArray();
+
+			filter.mesh.uv = data.uv.ToArray();
+			filter.mesh.RecalculateNormals();
+
+			coll.sharedMesh = null;
+			Mesh mesh = new Mesh();
+			mesh.vertices = data.vertices.ToArray();
+			mesh.triangles = data.triangles.ToArray();
+			mesh.RecalculateNormals();
+
+			coll.sharedMesh = mesh;
+
+			return filter.mesh;
+		}
+
+		public class VoxelRect {
+			public float x;
+			public float y;
+			public float width;
+			public float height;
+
+			public VoxelRect(float x, float y, float width, float height) {
+				this.x = x;
+				this.y = y;
+				this.width = width;
+				this.height = height;
+			}
+		}
+
+	}
+}
