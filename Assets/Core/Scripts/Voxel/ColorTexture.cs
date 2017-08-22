@@ -35,21 +35,23 @@ public class ColorTexture : MonoBehaviour {
 		Vector2 pos = colorMap[color];
 		Vector2[] UVs = new Vector2[4];
 
+		const float offset = 0.2f;
+
 		UVs[0] = new Vector2(
-			pos.x / (float)size,
-			pos.y / (float)size
+			(pos.x + offset)  / (float)size,
+			(pos.y + offset) / (float)size
 		);
 		UVs[1] = new Vector2(
-			pos.x / (float)size,
-			(pos.y + 1) / (float)size
+			(pos.x + offset) / (float)size,
+			(pos.y + 1 - offset) / (float)size
 		);
 		UVs[2] = new Vector2(
-			(pos.x + 1) / (float)size,
-			(pos.y + 1) / (float)size
+			(pos.x + 1 - offset) / (float)size,
+			(pos.y + 1 - offset) / (float)size
 		);
 		UVs[3] = new Vector2(
-			(pos.x + 1) / (float)size,
-			pos.y / (float)size
+			(pos.x + 1 - offset) / (float)size,
+			(pos.y + offset) / (float)size
 		);
 
 		Debug.LogFormat(
