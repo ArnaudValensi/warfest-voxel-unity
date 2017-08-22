@@ -29,6 +29,10 @@ namespace Warfest {
 				if (chunk.IsOutOfRange(touchingPos) || chunk.GetVoxel(touchingPos).IsAir) {
 					VoxelGeometry.CreateVertexFace(meshData, pos, dir);
 					VoxelGeometry.AddQuadTriangles(meshData);
+
+					// TODO
+					Vector2[] colorUvs = chunk.GetVoxel(pos).colorUvs;
+					meshData.uv.AddRange(colorUvs);
 				}
 			}
 

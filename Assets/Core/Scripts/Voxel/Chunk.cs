@@ -1,4 +1,6 @@
-﻿namespace Warfest {
+﻿using UnityEngine;
+
+namespace Warfest {
 	public class Chunk {
 
 		public Voxel[,,] voxels;
@@ -13,18 +15,19 @@
 			for (int x = 0; x < sizeX; x++) {
 				for (int y = 0; y < sizeY; y++) {
 					for (int z = 0; z < sizeZ; z++) {
-						voxels[x, y, z] = new Voxel();
+						voxels[x, y, z] = new Voxel(Voxel.Type.Air, null);
 					}
 				}
 			}
 		}
 
-		public void SetVoxel(int x, int y, int z, Voxel.Type type) {
+		public void SetVoxel(int x, int y, int z, Voxel.Type type, Vector2[] colorUvs) {
 			voxels[x, y, z].type = type;
+			voxels[x, y, z].colorUvs = colorUvs;
 		}
 
-		public void SetVoxel(Pos pos, Voxel.Type type) {
-			SetVoxel(pos.x, pos.y, pos.z, type);
+		public void SetVoxel(Pos pos, Voxel.Type type, Vector2[] colorUvs) {
+			SetVoxel(pos.x, pos.y, pos.z, type, colorUvs);
 		}
 
 		public Voxel GetVoxel(int x, int y, int z) {

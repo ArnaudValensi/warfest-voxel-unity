@@ -19,8 +19,8 @@ namespace Warfest {
 			meshCollider = GetComponent<MeshCollider>();
 
 			chunk = new Chunk(sizeX, sizeY, sizeZ);
-			chunk.SetVoxel(0, 0, 0, Voxel.Type.Solid);
-			chunk.SetVoxel(1, 0, 0, Voxel.Type.Solid);
+			chunk.SetVoxel(0, 0, 0, Voxel.Type.Solid, null);
+			chunk.SetVoxel(1, 0, 0, Voxel.Type.Solid, null);
 
 			MeshData meshData = VoxelMeshBuilder.BuildMesh(chunk);
 			VoxelMeshBuilder.RenderMesh(meshData, meshFilter, meshCollider);

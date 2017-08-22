@@ -1,15 +1,21 @@
 ﻿using System.IO;
 using UnityEngine;
 using Ionic.Zlib;
+using System.Collections.Generic;
 
 public class QBTFile {
 
 	VoxelData[,,] voxelsData;
 	public VoxelData[,,] VoxelsData { get { return voxelsData; } }
 
+	HashSet<Color> colors;
+	public HashSet<Color> Colors { get { return colors; } }
+
 	bool mergeCompounds = false;
 
 	public QBTFile(string path) {
+		colors = new HashSet<Color>();
+
 		using (var readStream = File.OpenRead(path)) {
 			LoadQB2(new BinaryReader(readStream));
 		}
@@ -76,7 +82,6 @@ public class QBTFile {
 			stream.ReadBytes((int)dataSize); // skip node if unknown
 			break;
 		}
-
 	}
 
 	void LoadModel(BinaryReader stream) {
@@ -133,8 +138,7 @@ public class QBTFile {
 					data.m = zlibStream.ReadByte();
 
 					voxelsData[x, y, z] = data;
-
-					Debug.Log("data: " + data);
+					colors.Add(data.Color);
 				}
 			}
 		}
@@ -219,6 +223,8 @@ public class QBTFile {
 		public override string ToString() {
 			return r + ", " + g + ", " + b + ", " + m;
 		}
+
+		public Color Color { get { return new Color(1f / r, 1f / g, 1f / b, 1); } }
 	}
 
 }

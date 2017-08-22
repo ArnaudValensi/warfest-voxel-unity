@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Linq;
 
 namespace Warfest {
 	[RequireComponent(typeof(MeshFilter))]
@@ -13,24 +14,36 @@ namespace Warfest {
 		Chunk chunk;
 		MeshFilter meshFilter;
 		MeshCollider meshCollider;
+		MeshRenderer meshRenderer;
+		ColorTexture colorTexture;
 
 		void Start() {
 			meshFilter = GetComponent<MeshFilter>();
 			meshCollider = GetComponent<MeshCollider>();
+			meshRenderer = GetComponent<MeshRenderer>();
+			colorTexture = GameObject.Find("/Managers/ColorTexture").GetComponent<ColorTexture>();
 
-			QBTFile.VoxelData[,,] qbtData = LoadQubicleFile().VoxelsData;
+			QBTFile qbtFile = LoadQubicleFile();
+			QBTFile.VoxelData[,,] qbtData = qbtFile.VoxelsData;
+
+			colorTexture.AddColors(qbtFile.Colors.ToArray());
 
 			chunk = new Chunk(qbtData.GetLength(0), qbtData.GetLength(1), qbtData.GetLength(2));
 			for (int x = 0; x < qbtData.GetLength(0); x++) {
 				for (int y = 0; y < qbtData.GetLength(1); y++) {
 					for (int z = 0; z < qbtData.GetLength(2); z++) {
 						if (qbtData[x, y, z].m != 0) {
-							chunk.SetVoxel(x, y, z, Voxel.Type.Solid);
+							chunk.SetVoxel(
+								x, y, z,
+								Voxel.Type.Solid,
+								colorTexture.GetColorUVs(qbtData[x, y, z].Color)
+							);
 						}
 					}
 				}
 			}
 
+			meshRenderer.sharedMaterial.mainTexture = colorTexture.Texture;
 			MeshData meshData = VoxelMeshBuilder.BuildMesh(chunk);
 			VoxelMeshBuilder.RenderMesh(meshData, meshFilter, meshCollider);
 		}

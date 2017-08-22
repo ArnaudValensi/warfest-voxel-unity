@@ -1,4 +1,6 @@
-﻿namespace Warfest {
+﻿using UnityEngine;
+
+namespace Warfest {
 	public class Voxel {
 
 		public enum Type {
@@ -10,8 +12,11 @@
 		public bool IsAir { get { return type == Type.Air; } }
 		public bool IsSolid { get { return !IsAir; } }
 
-		public Voxel(Type type = Type.Air) {
+		public Vector2[] colorUvs;
+
+		public Voxel(Type type, Vector2[] colorUvs) {
 			this.type = type;
+			this.colorUvs = colorUvs;
 		}
 
 	}
