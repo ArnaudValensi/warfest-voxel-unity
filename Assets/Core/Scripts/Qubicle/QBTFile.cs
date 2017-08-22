@@ -5,6 +5,8 @@ using Ionic.Zlib;
 public class QBTFile {
 
 	VoxelData[,,] voxelsData;
+	public VoxelData[,,] VoxelsData { get { return voxelsData; } }
+
 	bool mergeCompounds = false;
 
 	public QBTFile(string path) {
@@ -38,6 +40,9 @@ public class QBTFile {
 		}
 
 		uint colorCount = stream.ReadUInt32();
+
+		Debug.LogFormat("[QBT] color count: {0}", colorCount);
+
 		int[] colors = new int[colorCount];
 		for (uint i = 0; i < colorCount; i++) {
 			colors[i] = stream.ReadInt32();

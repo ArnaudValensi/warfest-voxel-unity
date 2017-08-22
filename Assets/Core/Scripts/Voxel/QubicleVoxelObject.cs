@@ -11,27 +11,36 @@ namespace Warfest {
 		public int sizeZ;
 
 		Chunk chunk;
-//		MeshFilter meshFilter;
-//		MeshCollider meshCollider;
+		MeshFilter meshFilter;
+		MeshCollider meshCollider;
 
 		void Start() {
-//			meshFilter = GetComponent<MeshFilter>();
-//			meshCollider = GetComponent<MeshCollider>();
-//
-//			chunk = new Chunk(sizeX, sizeY, sizeZ);
+			meshFilter = GetComponent<MeshFilter>();
+			meshCollider = GetComponent<MeshCollider>();
 
-			LoadQubicleFile();
+			QBTFile.VoxelData[,,] qbtData = LoadQubicleFile().VoxelsData;
 
-//			MeshData meshData = VoxelMeshBuilder.BuildMesh(chunk);
-//			VoxelMeshBuilder.RenderMesh(meshData, meshFilter, meshCollider);
+			chunk = new Chunk(qbtData.GetLength(0), qbtData.GetLength(1), qbtData.GetLength(2));
+			for (int x = 0; x < qbtData.GetLength(0); x++) {
+				for (int y = 0; y < qbtData.GetLength(1); y++) {
+					for (int z = 0; z < qbtData.GetLength(2); z++) {
+						if (qbtData[x, y, z].m != 0) {
+							chunk.SetVoxel(x, y, z, Voxel.Type.Solid);
+						}
+					}
+				}
+			}
+
+			MeshData meshData = VoxelMeshBuilder.BuildMesh(chunk);
+			VoxelMeshBuilder.RenderMesh(meshData, meshFilter, meshCollider);
 		}
 
-		void LoadQubicleFile() {
+		QBTFile LoadQubicleFile() {
 			string qbtPath = GameConfig.Instance.GetModelsPath() + "/Deer.qbt";
 
 			Debug.Log("Path: " + qbtPath);
 
-			new QBTFile(qbtPath);
+			return new QBTFile(qbtPath);
 		}
 
 	}
