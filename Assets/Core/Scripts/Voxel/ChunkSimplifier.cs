@@ -15,15 +15,16 @@ namespace Warfest {
 		public MeshData BuildMesh(Chunk chunk) {
 			MeshData meshData = new MeshData();
 
-			BuildFace(meshData, chunk, Direction.south);
-			BuildFace(meshData, chunk, Direction.north);
-			BuildFace(meshData, chunk, Direction.west);
-//			BuildFace(meshData, chunk, Direction.east);
+			BuildFace(meshData, chunk, Direction.south, 0);
+			BuildFace(meshData, chunk, Direction.north, 0);
+			BuildFace(meshData, chunk, Direction.west, 0);
+			BuildFace(meshData, chunk, Direction.east, 0);
+			BuildFace(meshData, chunk, Direction.up, 0);
 
 			return meshData;
 		}
 
-		void BuildFace(MeshData meshData, Chunk chunk, Direction dir) {
+		void BuildFace(MeshData meshData, Chunk chunk, Direction dir, int z) {
 			HashSet<Vector2> usedPos = new HashSet<Vector2>();
 			List<VoxelRect> rectangles = new List<VoxelRect>();
 
@@ -33,13 +34,13 @@ namespace Warfest {
 
 			pos = GetNextPos(usedPos, pos, chunk, dir);
 			while (pos != endPos) {
-				Voxel currentVoxel = chunk.GetVoxelBasedOnPlan((int)pos.x, (int)pos.y, 0, dir);
+				Voxel currentVoxel = chunk.GetVoxelBasedOnPlan((int)pos.x, (int)pos.y, z, dir);
 
 				lineSize = GetSimilarVoxelCountNextToThisPos(pos, currentVoxel.color, chunk, usedPos, dir);
 
 				compatibleLines = GetCompatibleLines(pos, currentVoxel.color, chunk, lineSize, usedPos, dir);
 
-				VoxelRect rect = new VoxelRect(pos.x, pos.y, lineSize, compatibleLines);
+				VoxelRect rect = new VoxelRect(pos.x, pos.y, z, lineSize, compatibleLines);
 				rectangles.Add(rect);
 
 				SetUsedPos(usedPos, rect);
@@ -55,8 +56,8 @@ namespace Warfest {
 		Vector2 GetNextPos(HashSet<Vector2> usedPos, Vector2 pos, Chunk chunk, Direction dir) {
 			int x = (int)pos.x;
 
-			int chunkSizeX = chunk.SizeXBaseOnPlan(dir);
-			int chunkSizeY = chunk.SizeYBaseOnPlan(dir);
+			int chunkSizeX = chunk.SizeXBasedOnPlan(dir);
+			int chunkSizeY = chunk.SizeYBasedOnPlan(dir);
 
 			for (int y = (int)pos.y; y < chunkSizeY; y++) {
 				for (; x < chunkSizeX; x++) {
@@ -76,7 +77,7 @@ namespace Warfest {
 		int GetSimilarVoxelCountNextToThisPos(Vector2 pos, Color32 color, Chunk chunk, HashSet<Vector2> usedPos, Direction dir) {
 			int count = 1;
 
-			int chunkSizeX = chunk.SizeXBaseOnPlan(dir);
+			int chunkSizeX = chunk.SizeXBasedOnPlan(dir);
 
 			for (int x = (int)pos.x + 1; x < chunkSizeX; x++) {
 				if (usedPos.Contains(new Vector2(x, pos.y)) || !chunk.GetVoxelBasedOnPlan(x, (int)pos.y, 0, dir).color.Equals(color)) {
@@ -92,7 +93,7 @@ namespace Warfest {
 		bool IsLineCompatible(Vector2 pos, int lineSize, Color32 color, Chunk chunk, HashSet<Vector2> usedPos, Direction dir) {
 			int count = 0;
 
-			int chunkSizeX = chunk.SizeXBaseOnPlan(dir);
+			int chunkSizeX = chunk.SizeXBasedOnPlan(dir);
 
 			for (int x = (int)pos.x; x < chunkSizeX && count < lineSize; x++) {
 				if (!usedPos.Contains(new Vector2(x, pos.y)) && chunk.GetVoxelBasedOnPlan(x, (int)pos.y, 0, dir).color.Equals(color)) {
@@ -108,7 +109,7 @@ namespace Warfest {
 		int GetCompatibleLines(Vector2 pos, Color32 color, Chunk chunk, int lineSize, HashSet<Vector2> usedPos, Direction dir) {
 			int count = 1;
 
-			int chunkSizeY = chunk.SizeYBaseOnPlan(dir);
+			int chunkSizeY = chunk.SizeYBasedOnPlan(dir);
 
 			for (int y = (int)pos.y + 1; y < chunkSizeY; y++) {
 				if (!IsLineCompatible(new Vector2(pos.x, y), lineSize, color, chunk, usedPos, dir)) {
@@ -134,6 +135,7 @@ namespace Warfest {
 		VoxelRect GetRegularPlanRect(VoxelRect rect, Direction originalDir, Chunk chunk) {
 			float x;
 			float y;
+			float z;
 			float width;
 			float height;
 
@@ -141,21 +143,26 @@ namespace Warfest {
 				return rect;
 			}
 
-			int chunkSizeX = chunk.SizeXBaseOnPlan(originalDir);
-			int chunkSizeY = chunk.SizeYBaseOnPlan(originalDir);
+			int chunkSizeX = chunk.SizeXBasedOnPlan(originalDir);
+			int chunkSizeY = chunk.SizeYBasedOnPlan(originalDir);
+			int chunkSizeZ = chunk.SizeZBasedOnPlan(originalDir);
 
 			switch (originalDir) {
 			case Direction.north:
 				x = chunkSizeX - rect.x - rect.width;
 				y = rect.y;
+				z = rect.z;
 				width = rect.width;
 				height = rect.height;
 
-				return new VoxelRect(x, y, width, height);
+				return new VoxelRect(x, y, z, width, height);
 			case Direction.west:
 				return rect;
 			case Direction.east:
-				return rect;
+				Debug.Log("chunkSizeZ: " + chunkSizeZ + ", rect.z: " + rect.z);
+				return new VoxelRect(rect.x, rect.y, chunkSizeZ - rect.z - 1, rect.width, rect.height);
+			case Direction.up:
+				return new VoxelRect(rect.x, rect.y, chunkSizeZ - rect.z - 1, rect.width, rect.height);
 			default:
 				throw new System.Exception("Bad direction");
 			}
@@ -185,6 +192,7 @@ namespace Warfest {
 			float startY = rect.y;
 			float endX = rect.x + rect.width - 1;
 			float endY = rect.y + rect.height - 1;
+			float z = rect.z;
 
 //			vertices.Add(new Vector3(startX - 0.5f, startY - 0.5f, 0f - 0.5f));
 //			vertices.Add(new Vector3(startX - 0.5f, endY   + 0.5f, 0f - 0.5f));
@@ -203,14 +211,15 @@ namespace Warfest {
 				vertices.Add(new Vector3(startX - 0.5f, startY - 0.5f, 0f + 0.5f));
 				break;
 			case Direction.east:
+				Debug.Log("z: " + z);
 //				vertices.Add(new Vector3(pos.x + 0.5f, pos.y - 0.5f, pos.z - 0.5f));
 //				vertices.Add(new Vector3(pos.x + 0.5f, pos.y + 0.5f, pos.z - 0.5f));
 //				vertices.Add(new Vector3(pos.x + 0.5f, pos.y + 0.5f, pos.z + 0.5f));
 //				vertices.Add(new Vector3(pos.x + 0.5f, pos.y - 0.5f, pos.z + 0.5f));
-				vertices.Add(new Vector3(endX + 0.5f, startY - 0.5f, 0f - 0.5f));
-				vertices.Add(new Vector3(endX + 0.5f, endY   + 0.5f, 0f - 0.5f));
-				vertices.Add(new Vector3(endX + 0.5f, endY   + 0.5f, 0f + 0.5f));
-				vertices.Add(new Vector3(endX + 0.5f, startY - 0.5f, 0f + 0.5f));
+				vertices.Add(new Vector3(z + endX + 0.5f, startY - 0.5f, 0f - 0.5f));
+				vertices.Add(new Vector3(z + endX + 0.5f, endY   + 0.5f, 0f - 0.5f));
+				vertices.Add(new Vector3(z + endX + 0.5f, endY   + 0.5f, 0f + 0.5f));
+				vertices.Add(new Vector3(z + endX + 0.5f, startY - 0.5f, 0f + 0.5f));
 				break;
 			case Direction.south:
 //				vertices.Add(new Vector3(pos.x - 0.5f, pos.y - 0.5f, pos.z - 0.5f));
@@ -237,6 +246,10 @@ namespace Warfest {
 //				vertices.Add(new Vector3(pos.x + 0.5f, pos.y + 0.5f, pos.z + 0.5f));
 //				vertices.Add(new Vector3(pos.x + 0.5f, pos.y + 0.5f, pos.z - 0.5f));
 //				vertices.Add(new Vector3(pos.x - 0.5f, pos.y + 0.5f, pos.z - 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, z + endY + 0.5f, 0f + 0.5f));
+				vertices.Add(new Vector3(endX   + 0.5f, z + endY + 0.5f, 0f + 0.5f));
+				vertices.Add(new Vector3(endX   + 0.5f, z + endY + 0.5f, 0f - 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, z + endY + 0.5f, 0f - 0.5f));
 				break;
 			case Direction.down:
 //				vertices.Add(new Vector3(pos.x - 0.5f, pos.y - 0.5f, pos.z - 0.5f));
@@ -286,12 +299,14 @@ namespace Warfest {
 		public class VoxelRect {
 			public float x;
 			public float y;
+			public float z;
 			public float width;
 			public float height;
 
-			public VoxelRect(float x, float y, float width, float height) {
+			public VoxelRect(float x, float y, float z, float width, float height) {
 				this.x = x;
 				this.y = y;
+				this.z = z;
 				this.width = width;
 				this.height = height;
 			}

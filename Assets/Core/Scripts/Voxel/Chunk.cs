@@ -77,7 +77,7 @@ namespace Warfest {
 			return IsOutOfRange(pos.x, pos.y, pos.z);
 		}
 
-		public int SizeXBaseOnPlan(Direction direction) {
+		public int SizeXBasedOnPlan(Direction direction) {
 			switch (direction) {
 			case Direction.south:
 				return voxels.GetLength(0);
@@ -96,7 +96,7 @@ namespace Warfest {
 			}
 		}
 
-		public int SizeYBaseOnPlan(Direction direction) {
+		public int SizeYBasedOnPlan(Direction direction) {
 			switch (direction) {
 			case Direction.south:
 				return voxels.GetLength(1);
@@ -115,7 +115,7 @@ namespace Warfest {
 			}
 		}
 
-		public int SizeZBaseOnPlan(Direction direction) {
+		public int SizeZBasedOnPlan(Direction direction) {
 			switch (direction) {
 			case Direction.south:
 				return voxels.GetLength(2);
