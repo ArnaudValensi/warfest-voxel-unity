@@ -12,11 +12,11 @@ namespace Warfest {
 		public bool IsAir { get { return type == Type.Air; } }
 		public bool IsSolid { get { return !IsAir; } }
 
-		public Vector2[] colorUvs;
+		public Vector2 colorUv;
 
-		public Voxel(Type type, Vector2[] colorUvs) {
+		public Voxel(Type type, Vector2 colorUv) {
 			this.type = type;
-			this.colorUvs = colorUvs;
+			this.colorUv = colorUv;
 		}
 
 	}

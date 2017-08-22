@@ -30,9 +30,11 @@ namespace Warfest {
 					VoxelGeometry.CreateVertexFace(meshData, pos, dir);
 					VoxelGeometry.AddQuadTriangles(meshData);
 
-					// TODO
-					Vector2[] colorUvs = chunk.GetVoxel(pos).colorUvs;
-					meshData.uv.AddRange(colorUvs);
+					Vector2 colorUv = chunk.GetVoxel(pos).colorUv;
+					meshData.uv.Add(colorUv);
+					meshData.uv.Add(colorUv);
+					meshData.uv.Add(colorUv);
+					meshData.uv.Add(colorUv);
 				}
 			}
 

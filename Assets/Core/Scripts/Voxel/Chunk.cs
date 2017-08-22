@@ -15,19 +15,19 @@ namespace Warfest {
 			for (int x = 0; x < sizeX; x++) {
 				for (int y = 0; y < sizeY; y++) {
 					for (int z = 0; z < sizeZ; z++) {
-						voxels[x, y, z] = new Voxel(Voxel.Type.Air, null);
+						voxels[x, y, z] = new Voxel(Voxel.Type.Air, Vector2.zero);
 					}
 				}
 			}
 		}
 
-		public void SetVoxel(int x, int y, int z, Voxel.Type type, Vector2[] colorUvs) {
+		public void SetVoxel(int x, int y, int z, Voxel.Type type, Vector2 colorUv) {
 			voxels[x, y, z].type = type;
-			voxels[x, y, z].colorUvs = colorUvs;
+			voxels[x, y, z].colorUv = colorUv;
 		}
 
-		public void SetVoxel(Pos pos, Voxel.Type type, Vector2[] colorUvs) {
-			SetVoxel(pos.x, pos.y, pos.z, type, colorUvs);
+		public void SetVoxel(Pos pos, Voxel.Type type, Vector2 colorUv) {
+			SetVoxel(pos.x, pos.y, pos.z, type, colorUv);
 		}
 
 		public Voxel GetVoxel(int x, int y, int z) {

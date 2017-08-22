@@ -36,7 +36,7 @@ namespace Warfest {
 							chunk.SetVoxel(
 								x, y, z,
 								Voxel.Type.Solid,
-								colorTexture.GetColorUVs(qbtData[x, y, z].Color)
+								colorTexture.GetColorUV(qbtData[x, y, z].Color)
 							);
 						}
 					}
