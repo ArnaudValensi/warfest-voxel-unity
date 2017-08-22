@@ -14,6 +14,13 @@ namespace Warfest {
 
 		public MeshData BuildMesh(Chunk chunk) {
 			MeshData meshData = new MeshData();
+
+			BuildFace(meshData, chunk);
+
+			return meshData;
+		}
+
+		void BuildFace(MeshData meshData, Chunk chunk) {
 			HashSet<Vector2> usedPos = new HashSet<Vector2>();
 			List<VoxelRect> rectangles = new List<VoxelRect>();
 
@@ -21,10 +28,8 @@ namespace Warfest {
 			int compatibleLines = 0;
 			Vector2 pos = new Vector2(0f, 0f);
 
-			int loopCount = 0;
-
 			pos = GetNextPos(usedPos, pos, chunk);
-			while (pos != endPos && loopCount < 2000) {
+			while (pos != endPos) {
 				Voxel currentVoxel = chunk.GetVoxel((int)pos.x, (int)pos.y, 0);
 
 				lineSize = GetSimilarVoxelCountNextToThisPos(pos, currentVoxel.color, chunk, usedPos);
@@ -39,14 +44,9 @@ namespace Warfest {
 				Debug.LogFormat("pos: {0}, lineSize: {1}, compatibleLines: {2}", pos, lineSize, compatibleLines);
 
 				pos = GetNextPos(usedPos, pos, chunk);
-
-				loopCount++;
 			}
 
 			BuildRectangleMeshed(rectangles, meshData, chunk);
-
-			return meshData;
-
 		}
 
 		Vector2 GetNextPos(HashSet<Vector2> usedPos, Vector2 pos, Chunk chunk) {
