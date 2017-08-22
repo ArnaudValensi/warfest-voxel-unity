@@ -38,6 +38,24 @@ namespace Warfest {
 			return GetVoxel(pos.x, pos.y, pos.z);
 		}
 
+		public Voxel GetVoxelBasedOnPlan(int x, int y, int z, Direction direction) {
+			if (direction == Direction.south) {
+				return voxels[x, y, z];
+			} else if (direction == Direction.north) {
+				return voxels[SizeX - x - 1, y, SizeZ - z - 1];
+			} else if (direction == Direction.west) {
+				return voxels[SizeZ - z - 1, y, x];
+			} else if (direction == Direction.east) {
+				return voxels[z, y, SizeX - x - 1];
+			} else if (direction == Direction.up) {
+				return voxels[x, z, SizeY - y - 1];
+			} else if (direction == Direction.down) {
+				return voxels[x, SizeZ - z - 1, y];
+			}
+
+			throw new UnityException("Unknown direction");
+		}
+
 		public bool IsInRange(int x, int y, int z) {
 			return x >= 0 && x < SizeX && y >= 0 && y < SizeY && z >= 0 && z < SizeZ;
 		}

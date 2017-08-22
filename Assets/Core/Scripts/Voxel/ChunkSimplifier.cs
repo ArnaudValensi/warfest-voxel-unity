@@ -15,12 +15,12 @@ namespace Warfest {
 		public MeshData BuildMesh(Chunk chunk) {
 			MeshData meshData = new MeshData();
 
-			BuildFace(meshData, chunk);
+			BuildFace(meshData, chunk, Direction.south);
 
 			return meshData;
 		}
 
-		void BuildFace(MeshData meshData, Chunk chunk) {
+		void BuildFace(MeshData meshData, Chunk chunk, Direction dir) {
 			HashSet<Vector2> usedPos = new HashSet<Vector2>();
 			List<VoxelRect> rectangles = new List<VoxelRect>();
 
@@ -28,13 +28,13 @@ namespace Warfest {
 			int compatibleLines = 0;
 			Vector2 pos = new Vector2(0f, 0f);
 
-			pos = GetNextPos(usedPos, pos, chunk);
+			pos = GetNextPos(usedPos, pos, chunk, dir);
 			while (pos != endPos) {
-				Voxel currentVoxel = chunk.GetVoxel((int)pos.x, (int)pos.y, 0);
+				Voxel currentVoxel = chunk.GetVoxelBasedOnPlan((int)pos.x, (int)pos.y, 0, dir);
 
-				lineSize = GetSimilarVoxelCountNextToThisPos(pos, currentVoxel.color, chunk, usedPos);
+				lineSize = GetSimilarVoxelCountNextToThisPos(pos, currentVoxel.color, chunk, usedPos, dir);
 
-				compatibleLines = GetCompatibleLines(pos, currentVoxel.color, chunk, lineSize, usedPos);
+				compatibleLines = GetCompatibleLines(pos, currentVoxel.color, chunk, lineSize, usedPos, dir);
 
 				VoxelRect rect = new VoxelRect(pos.x, pos.y, lineSize, compatibleLines);
 				rectangles.Add(rect);
@@ -43,20 +43,20 @@ namespace Warfest {
 
 				Debug.LogFormat("pos: {0}, lineSize: {1}, compatibleLines: {2}", pos, lineSize, compatibleLines);
 
-				pos = GetNextPos(usedPos, pos, chunk);
+				pos = GetNextPos(usedPos, pos, chunk, dir);
 			}
 
 			BuildRectangleMeshed(rectangles, meshData, chunk);
 		}
 
-		Vector2 GetNextPos(HashSet<Vector2> usedPos, Vector2 pos, Chunk chunk) {
+		Vector2 GetNextPos(HashSet<Vector2> usedPos, Vector2 pos, Chunk chunk, Direction dir) {
 			int x = (int)pos.x;
 
 			for (int y = (int)pos.y; y < chunk.SizeY; y++) {
 				for (; x < chunk.SizeX; x++) {
 					Vector2 currentPos = new Vector2(x, y);
 
-					if (!usedPos.Contains(currentPos) && chunk.GetVoxel(x, y, 0).IsSolid) {
+					if (!usedPos.Contains(currentPos) && chunk.GetVoxelBasedOnPlan(x, y, 0, dir).IsSolid) {
 						return currentPos;
 					}
 				}
@@ -67,11 +67,11 @@ namespace Warfest {
 			return endPos;
 		}
 
-		int GetSimilarVoxelCountNextToThisPos(Vector2 pos, Color32 color, Chunk chunk, HashSet<Vector2> usedPos) {
+		int GetSimilarVoxelCountNextToThisPos(Vector2 pos, Color32 color, Chunk chunk, HashSet<Vector2> usedPos, Direction dir) {
 			int count = 1;
 
 			for (int x = (int)pos.x + 1; x < chunk.SizeX; x++) {
-				if (usedPos.Contains(new Vector2(x, pos.y)) || !chunk.GetVoxel(x, (int)pos.y, 0).color.Equals(color)) {
+				if (usedPos.Contains(new Vector2(x, pos.y)) || !chunk.GetVoxelBasedOnPlan(x, (int)pos.y, 0, dir).color.Equals(color)) {
 					return count;
 				}
 
@@ -81,11 +81,11 @@ namespace Warfest {
 			return count;
 		}
 
-		bool IsLineCompatible(Vector2 pos, int lineSize, Color32 color, Chunk chunk, HashSet<Vector2> usedPos) {
+		bool IsLineCompatible(Vector2 pos, int lineSize, Color32 color, Chunk chunk, HashSet<Vector2> usedPos, Direction dir) {
 			int count = 0;
 
 			for (int x = (int)pos.x; x < chunk.SizeX && count < lineSize; x++) {
-				if (!usedPos.Contains(new Vector2(x, pos.y)) && chunk.GetVoxel(x, (int)pos.y, 0).color.Equals(color)) {
+				if (!usedPos.Contains(new Vector2(x, pos.y)) && chunk.GetVoxelBasedOnPlan(x, (int)pos.y, 0, dir).color.Equals(color)) {
 					count++;
 				} else {
 					return false;
@@ -95,11 +95,11 @@ namespace Warfest {
 			return count == lineSize;
 		}
 
-		int GetCompatibleLines(Vector2 pos, Color32 color, Chunk chunk, int lineSize, HashSet<Vector2> usedPos) {
+		int GetCompatibleLines(Vector2 pos, Color32 color, Chunk chunk, int lineSize, HashSet<Vector2> usedPos, Direction dir) {
 			int count = 1;
 
 			for (int y = (int)pos.y + 1; y < chunk.SizeY; y++) {
-				if (!IsLineCompatible(new Vector2(pos.x, y), lineSize, color, chunk, usedPos)) {
+				if (!IsLineCompatible(new Vector2(pos.x, y), lineSize, color, chunk, usedPos, dir)) {
 					return count;
 				}
 
