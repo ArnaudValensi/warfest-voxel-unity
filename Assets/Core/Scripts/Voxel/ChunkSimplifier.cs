@@ -20,6 +20,7 @@ namespace Warfest {
 			BuildFace(meshData, chunk, Direction.west, 0);
 			BuildFace(meshData, chunk, Direction.east, 0);
 			BuildFace(meshData, chunk, Direction.up, 0);
+			BuildFace(meshData, chunk, Direction.down, 0);
 
 			return meshData;
 		}
@@ -163,6 +164,8 @@ namespace Warfest {
 				return new VoxelRect(rect.x, rect.y, chunkSizeZ - rect.z - 1, rect.width, rect.height);
 			case Direction.up:
 				return new VoxelRect(rect.x, rect.y, chunkSizeZ - rect.z - 1, rect.width, rect.height);
+			case Direction.down:
+				return rect;
 			default:
 				throw new System.Exception("Bad direction");
 			}
@@ -256,6 +259,10 @@ namespace Warfest {
 //				vertices.Add(new Vector3(pos.x + 0.5f, pos.y - 0.5f, pos.z - 0.5f));
 //				vertices.Add(new Vector3(pos.x + 0.5f, pos.y - 0.5f, pos.z + 0.5f));
 //				vertices.Add(new Vector3(pos.x - 0.5f, pos.y - 0.5f, pos.z + 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, startY - 0.5f, 0f - 0.5f));
+				vertices.Add(new Vector3(endX   + 0.5f, startY - 0.5f, 0f - 0.5f));
+				vertices.Add(new Vector3(endX   + 0.5f, startY - 0.5f, 0f + 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, startY - 0.5f, 0f + 0.5f));
 				break;
 			default:
 				throw new System.Exception("Bad direction");
