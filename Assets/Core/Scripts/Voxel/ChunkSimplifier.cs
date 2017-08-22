@@ -16,6 +16,7 @@ namespace Warfest {
 			MeshData meshData = new MeshData();
 
 			BuildFace(meshData, chunk, Direction.south);
+			BuildFace(meshData, chunk, Direction.north);
 
 			return meshData;
 		}
@@ -128,19 +129,49 @@ namespace Warfest {
 			}
 		}
 
+		VoxelRect GetRegularPlanRect(VoxelRect rect, Direction originalDir, Chunk chunk) {
+			float x;
+			float y;
+			float width;
+			float height;
+
+			if (originalDir == Direction.south) {
+				return rect;
+			}
+
+			int chunkSizeX = chunk.SizeXBaseOnPlan(originalDir);
+			int chunkSizeY = chunk.SizeYBaseOnPlan(originalDir);
+
+			switch (originalDir) {
+			case Direction.north:
+				x = chunkSizeX - rect.x - rect.width;
+				y = rect.y;
+				width = rect.width;
+				height = rect.height;
+
+				return new VoxelRect(x, y, width, height);
+			case Direction.west:
+				return rect;
+			default:
+				throw new System.Exception("Bad direction");
+			}
+		}
+
 		void BuildRectangleMeshed(List<VoxelRect> rectangles, MeshData meshData, Chunk chunk, Direction dir) {
 			foreach (var rect in rectangles) {
-				CreateVertexFace(meshData, rect, dir);
+				VoxelRect regularPlanRect = GetRegularPlanRect(rect, dir, chunk);
+
+				CreateVertexFace(meshData, regularPlanRect, dir);
 				AddQuadTriangles(meshData);
 
-				Vector2 colorUv = colorTexture.GetColorUV(
-					chunk.GetVoxel((int)rect.x, (int)rect.y, 0).color
-				);
-
-				meshData.uv.Add(colorUv);
-				meshData.uv.Add(colorUv);
-				meshData.uv.Add(colorUv);
-				meshData.uv.Add(colorUv);
+//				Vector2 colorUv = colorTexture.GetColorUV(
+//					chunk.GetVoxel((int)rect.x, (int)rect.y, 0).color
+//				);
+//
+//				meshData.uv.Add(colorUv);
+//				meshData.uv.Add(colorUv);
+//				meshData.uv.Add(colorUv);
+//				meshData.uv.Add(colorUv);
 			}
 		}
 
@@ -188,6 +219,10 @@ namespace Warfest {
 //				vertices.Add(new Vector3(pos.x - 0.5f, pos.y + 0.5f, pos.z + 0.5f));
 //				vertices.Add(new Vector3(pos.x - 0.5f, pos.y + 0.5f, pos.z - 0.5f));
 //				vertices.Add(new Vector3(pos.x - 0.5f, pos.y - 0.5f, pos.z - 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, startY - 0.5f, 0f + 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, endY   + 0.5f, 0f + 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, endY   + 0.5f, 0f - 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, startY - 0.5f, 0f - 0.5f));
 				break;
 			case Direction.up:
 //				vertices.Add(new Vector3(pos.x - 0.5f, pos.y + 0.5f, pos.z + 0.5f));
