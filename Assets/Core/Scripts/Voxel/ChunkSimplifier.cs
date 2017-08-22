@@ -6,6 +6,12 @@ namespace Warfest {
 
 		readonly Vector2 endPos = new Vector2(-1, -1);
 
+		ColorTexture colorTexture;
+
+		void Start() {
+			colorTexture = GameManager.Instance.GetColorTexture();
+		}
+
 		public MeshData BuildMesh(Chunk chunk) {
 			MeshData meshData = new MeshData();
 			HashSet<Vector2> usedPos = new HashSet<Vector2>();
@@ -37,7 +43,7 @@ namespace Warfest {
 				loopCount++;
 			}
 
-			BuildRectangleMeshed(rectangles, meshData);
+			BuildRectangleMeshed(rectangles, meshData, chunk);
 
 			return meshData;
 
@@ -113,10 +119,19 @@ namespace Warfest {
 			}
 		}
 
-		void BuildRectangleMeshed(List<VoxelRect> rectangles, MeshData meshData) {
+		void BuildRectangleMeshed(List<VoxelRect> rectangles, MeshData meshData, Chunk chunk) {
 			foreach (var rect in rectangles) {
 				CreateVertexFace(meshData, rect);
 				AddQuadTriangles(meshData);
+
+				Vector2 colorUv = colorTexture.GetColorUV(
+					chunk.GetVoxel((int)rect.x, (int)rect.y, 0).color
+				);
+
+				meshData.uv.Add(colorUv);
+				meshData.uv.Add(colorUv);
+				meshData.uv.Add(colorUv);
+				meshData.uv.Add(colorUv);
 			}
 		}
 

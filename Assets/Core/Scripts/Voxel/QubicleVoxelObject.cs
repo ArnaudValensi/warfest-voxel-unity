@@ -54,7 +54,6 @@ namespace Warfest {
 
 			MeshData meshData = chunkSimplifier.BuildMesh(chunk);
 			chunkSimplifier.RenderMesh(meshData, meshFilter, meshCollider);
-
 		}
 
 		QBTFile LoadQubicleFile() {
