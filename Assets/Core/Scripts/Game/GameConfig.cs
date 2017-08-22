@@ -8,4 +8,8 @@ public class GameConfig : MonoBehaviourSingleton<GameConfig> {
 		return Application.persistentDataPath + "/" + saveFolder;
 	}
 
+	public string GetModelsPath() {
+		return Application.dataPath + "/StreamingAssets/Models";
+	}
+
 }
