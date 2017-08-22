@@ -15,22 +15,25 @@ namespace Warfest {
 		public MeshData BuildMesh(Chunk chunk) {
 			MeshData meshData = new MeshData();
 
-			Debug.Log("==== north ====");
-			BuildFace(meshData, chunk, Direction.north, 0);
-			Debug.Log("==== south ====");
-			BuildFace(meshData, chunk, Direction.south, 0);
-			Debug.Log("==== west ====");
-			BuildFace(meshData, chunk, Direction.west, 0);
-			Debug.Log("==== east ====");
-			BuildFace(meshData, chunk, Direction.east, 0);
+//			Debug.Log("==== north ====");
+//			BuildFace(meshData, chunk, Direction.north, 0);
+//			Debug.Log("==== south ====");
+//			BuildFace(meshData, chunk, Direction.south, 0);
+//			Debug.Log("==== west ====");
+//			BuildFace(meshData, chunk, Direction.west, 0);
+//			Debug.Log("==== east ====");
+//			BuildFace(meshData, chunk, Direction.east, 0);
 //			Debug.Log("==== up ====");
-//			BuildFace(meshData, chunk, Direction.up, 9);
-			Debug.Log("==== down ====");
-			BuildFace(meshData, chunk, Direction.down, 0);
+//			BuildFace(meshData, chunk, Direction.up, 0);
+//			Debug.Log("==== down ====");
+//			BuildFace(meshData, chunk, Direction.down, 0);
 
-			Debug.Log("==== up ====");
-			for (int i = 0; i < chunk.SizeY; i++) {
-				BuildFace(meshData, chunk, Direction.up, i);
+			foreach (var dir in DirectionUtils.Directions) {
+				int nbLayers = chunk.SizeZBasedOnPlan(dir);
+
+				for (int i = 0; i < nbLayers; i++) {
+					BuildFace(meshData, chunk, dir, i);
+				}
 			}
 
 			return meshData;
