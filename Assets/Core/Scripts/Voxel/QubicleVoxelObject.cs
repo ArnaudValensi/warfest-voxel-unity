@@ -32,13 +32,18 @@ namespace Warfest {
 
 			colorTexture.AddColors(qbtFile.Colors.ToArray());
 
-			chunk = new Chunk(qbtData.GetLength(0), qbtData.GetLength(1), qbtData.GetLength(2));
-			for (int x = 0; x < qbtData.GetLength(0); x++) {
-				for (int y = 0; y < qbtData.GetLength(1); y++) {
-					for (int z = 0; z < qbtData.GetLength(2); z++) {
+			int sizeX = qbtData.GetLength(0);
+			int sizeY = qbtData.GetLength(1);
+			int sizeZ = qbtData.GetLength(2);
+
+			chunk = new Chunk(sizeX, sizeY, sizeZ);
+			for (int x = 0; x < sizeX; x++) {
+				for (int y = 0; y < sizeY; y++) {
+					for (int z = 0; z < sizeZ; z++) {
 						if (qbtData[x, y, z].m != 0) {
+							// The z axis is reversed in qubicle
 							chunk.SetVoxel(
-								x, y, z,
+								x, y, sizeZ - 1 -z,
 								Voxel.Type.Solid,
 								qbtData[x, y, z].Color
 							);
@@ -49,15 +54,15 @@ namespace Warfest {
 
 			meshRenderer.sharedMaterial.mainTexture = colorTexture.Texture;
 
-//			MeshData meshData = voxelMeshBuilder.BuildMesh(chunk);
-//			voxelMeshBuilder.RenderMesh(meshData, meshFilter, meshCollider);
+			MeshData meshData = voxelMeshBuilder.BuildMesh(chunk);
+			voxelMeshBuilder.RenderMesh(meshData, meshFilter, meshCollider);
 
-			MeshData meshData = chunkSimplifier.BuildMesh(chunk);
-			chunkSimplifier.RenderMesh(meshData, meshFilter, meshCollider);
+//			MeshData meshData = chunkSimplifier.BuildMesh(chunk);
+//			chunkSimplifier.RenderMesh(meshData, meshFilter, meshCollider);
 		}
 
 		QBTFile LoadQubicleFile() {
-			string qbtPath = GameConfig.Instance.GetModelsPath() + "/Test.qbt";
+			string qbtPath = GameConfig.Instance.GetModelsPath() + "/Test2.qbt";
 
 			Debug.Log("Path: " + qbtPath);
 
