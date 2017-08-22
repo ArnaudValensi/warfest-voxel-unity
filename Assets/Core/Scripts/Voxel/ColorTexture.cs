@@ -7,20 +7,20 @@ public class ColorTexture : MonoBehaviour {
 
 	public Texture2D Texture { get { return texture; } }
 
-	Dictionary<Color, Vector2> colorMap;
+	Dictionary<Color32, Vector2> colorMap;
 
 	[SerializeField] int size = 0;
 
 	public int Size { get { return size; } }
 
-	public void AddColors(Color[] colors) {
+	public void AddColors(Color32[] colors) {
 		texture = new Texture2D(size, size);
-		colorMap = new Dictionary<Color, Vector2>();
+		colorMap = new Dictionary<Color32, Vector2>();
 
 		for (int i = 0; i < colors.Length; i++) {
 			int x = i % size;
 			int y = i / size;
-			Color color = colors[i];
+			Color32 color = colors[i];
 
 			texture.SetPixel(x, y, color);
 			colorMap.Add(color, new Vector2(x, y));
@@ -31,7 +31,7 @@ public class ColorTexture : MonoBehaviour {
 	}
 
 	// TODO: cache uvs
-	public Vector2[] GetColorUVs(Color color) {
+	public Vector2[] GetColorUVs(Color32 color) {
 		Vector2 pos = colorMap[color];
 		Vector2[] UVs = new Vector2[4];
 

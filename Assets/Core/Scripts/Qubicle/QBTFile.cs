@@ -8,13 +8,13 @@ public class QBTFile {
 	VoxelData[,,] voxelsData;
 	public VoxelData[,,] VoxelsData { get { return voxelsData; } }
 
-	HashSet<Color> colors;
-	public HashSet<Color> Colors { get { return colors; } }
+	HashSet<Color32> colors;
+	public HashSet<Color32> Colors { get { return colors; } }
 
 	bool mergeCompounds = false;
 
 	public QBTFile(string path) {
-		colors = new HashSet<Color>();
+		colors = new HashSet<Color32>();
 
 		using (var readStream = File.OpenRead(path)) {
 			LoadQB2(new BinaryReader(readStream));
@@ -132,10 +132,10 @@ public class QBTFile {
 				for (uint y = 0; y < size.y; y++) {
 					VoxelData data = new VoxelData();
 
-					data.r = zlibStream.ReadByte();
-					data.g = zlibStream.ReadByte();
-					data.b = zlibStream.ReadByte();
-					data.m = zlibStream.ReadByte();
+					data.r = (byte)zlibStream.ReadByte();
+					data.g = (byte)zlibStream.ReadByte();
+					data.b = (byte)zlibStream.ReadByte();
+					data.m = (byte)zlibStream.ReadByte();
 
 					voxelsData[x, y, z] = data;
 					colors.Add(data.Color);
@@ -184,10 +184,10 @@ public class QBTFile {
 				for (uint y = 0; y < size.y; y++) {
 					VoxelData data = new VoxelData();
 
-					data.r = zlibStream.ReadByte();
-					data.g = zlibStream.ReadByte();
-					data.b = zlibStream.ReadByte();
-					data.m = zlibStream.ReadByte();
+					data.r = (byte)zlibStream.ReadByte();
+					data.g = (byte)zlibStream.ReadByte();
+					data.b = (byte)zlibStream.ReadByte();
+					data.m = (byte)zlibStream.ReadByte();
 
 					voxelsData[x, y, z] = data;
 				}
@@ -215,16 +215,16 @@ public class QBTFile {
 	}
 
 	public struct VoxelData {
-		public int r;
-		public int g;
-		public int b;
-		public int m;
+		public byte r;
+		public byte g;
+		public byte b;
+		public byte m;
 
 		public override string ToString() {
 			return r + ", " + g + ", " + b + ", " + m;
 		}
 
-		public Color Color { get { return new Color(1f / r, 1f / g, 1f / b, 1); } }
+		public Color Color { get { return new Color32(r, g, b, (byte)1); } }
 	}
 
 }
