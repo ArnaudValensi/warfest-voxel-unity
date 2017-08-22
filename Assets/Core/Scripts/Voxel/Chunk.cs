@@ -39,21 +39,26 @@ namespace Warfest {
 		}
 
 		public Voxel GetVoxelBasedOnPlan(int x, int y, int z, Direction direction) {
-			if (direction == Direction.south) {
+			switch (direction) {
+			case Direction.south:
 				return voxels[x, y, z];
-			} else if (direction == Direction.north) {
+			case Direction.north:
 				return voxels[SizeX - x - 1, y, SizeZ - z - 1];
-			} else if (direction == Direction.west) {
+			case Direction.west:
 				return voxels[SizeZ - z - 1, y, x];
-			} else if (direction == Direction.east) {
+			case Direction.east:
 				return voxels[z, y, SizeX - x - 1];
-			} else if (direction == Direction.up) {
+			case Direction.up:
 				return voxels[x, z, SizeY - y - 1];
-			} else if (direction == Direction.down) {
+			case Direction.down:
 				return voxels[x, SizeZ - z - 1, y];
+			default:
+				throw new System.Exception("Bad direction");
 			}
+		}
 
-			throw new UnityException("Unknown direction");
+		public Voxel GetVoxelBasedOnPlan(Pos pos, Direction direction) {
+			return GetVoxelBasedOnPlan(pos.x, pos.y, pos.z, direction);
 		}
 
 		public bool IsInRange(int x, int y, int z) {
@@ -70,6 +75,63 @@ namespace Warfest {
 
 		public bool IsOutOfRange(Pos pos) {
 			return IsOutOfRange(pos.x, pos.y, pos.z);
+		}
+
+		public int SizeXBaseOnPlan(Direction direction) {
+			switch (direction) {
+			case Direction.south:
+				return voxels.GetLength(0);
+			case Direction.north:
+				return voxels.GetLength(0);
+			case Direction.west:
+				return voxels.GetLength(2);
+			case Direction.east:
+				return voxels.GetLength(2);
+			case Direction.up:
+				return voxels.GetLength(0);
+			case Direction.down:
+				return voxels.GetLength(0);
+			default:
+				throw new System.Exception("Bad direction");
+			}
+		}
+
+		public int SizeYBaseOnPlan(Direction direction) {
+			switch (direction) {
+			case Direction.south:
+				return voxels.GetLength(1);
+			case Direction.north:
+				return voxels.GetLength(1);
+			case Direction.west:
+				return voxels.GetLength(1);
+			case Direction.east:
+				return voxels.GetLength(1);
+			case Direction.up:
+				return voxels.GetLength(2);
+			case Direction.down:
+				return voxels.GetLength(2);
+			default:
+				throw new System.Exception("Bad direction");
+			}
+		}
+
+		public int SizeZBaseOnPlan(Direction direction) {
+			switch (direction) {
+			case Direction.south:
+				return voxels.GetLength(2);
+			case Direction.north:
+				return voxels.GetLength(2);
+			case Direction.west:
+				return voxels.GetLength(0);
+			case Direction.east:
+				return voxels.GetLength(0);
+			case Direction.up:
+				return voxels.GetLength(1);
+			case Direction.down:
+				return voxels.GetLength(1);
+			default:
+				throw new System.Exception("Bad direction");
+			}
 		}
 
 	}

@@ -46,14 +46,17 @@ namespace Warfest {
 				pos = GetNextPos(usedPos, pos, chunk, dir);
 			}
 
-			BuildRectangleMeshed(rectangles, meshData, chunk);
+			BuildRectangleMeshed(rectangles, meshData, chunk, dir);
 		}
 
 		Vector2 GetNextPos(HashSet<Vector2> usedPos, Vector2 pos, Chunk chunk, Direction dir) {
 			int x = (int)pos.x;
 
-			for (int y = (int)pos.y; y < chunk.SizeY; y++) {
-				for (; x < chunk.SizeX; x++) {
+			int chunkSizeX = chunk.SizeXBaseOnPlan(dir);
+			int chunkSizeY = chunk.SizeYBaseOnPlan(dir);
+
+			for (int y = (int)pos.y; y < chunkSizeY; y++) {
+				for (; x < chunkSizeX; x++) {
 					Vector2 currentPos = new Vector2(x, y);
 
 					if (!usedPos.Contains(currentPos) && chunk.GetVoxelBasedOnPlan(x, y, 0, dir).IsSolid) {
@@ -70,7 +73,9 @@ namespace Warfest {
 		int GetSimilarVoxelCountNextToThisPos(Vector2 pos, Color32 color, Chunk chunk, HashSet<Vector2> usedPos, Direction dir) {
 			int count = 1;
 
-			for (int x = (int)pos.x + 1; x < chunk.SizeX; x++) {
+			int chunkSizeX = chunk.SizeXBaseOnPlan(dir);
+
+			for (int x = (int)pos.x + 1; x < chunkSizeX; x++) {
 				if (usedPos.Contains(new Vector2(x, pos.y)) || !chunk.GetVoxelBasedOnPlan(x, (int)pos.y, 0, dir).color.Equals(color)) {
 					return count;
 				}
@@ -84,7 +89,9 @@ namespace Warfest {
 		bool IsLineCompatible(Vector2 pos, int lineSize, Color32 color, Chunk chunk, HashSet<Vector2> usedPos, Direction dir) {
 			int count = 0;
 
-			for (int x = (int)pos.x; x < chunk.SizeX && count < lineSize; x++) {
+			int chunkSizeX = chunk.SizeXBaseOnPlan(dir);
+
+			for (int x = (int)pos.x; x < chunkSizeX && count < lineSize; x++) {
 				if (!usedPos.Contains(new Vector2(x, pos.y)) && chunk.GetVoxelBasedOnPlan(x, (int)pos.y, 0, dir).color.Equals(color)) {
 					count++;
 				} else {
@@ -98,7 +105,9 @@ namespace Warfest {
 		int GetCompatibleLines(Vector2 pos, Color32 color, Chunk chunk, int lineSize, HashSet<Vector2> usedPos, Direction dir) {
 			int count = 1;
 
-			for (int y = (int)pos.y + 1; y < chunk.SizeY; y++) {
+			int chunkSizeY = chunk.SizeYBaseOnPlan(dir);
+
+			for (int y = (int)pos.y + 1; y < chunkSizeY; y++) {
 				if (!IsLineCompatible(new Vector2(pos.x, y), lineSize, color, chunk, usedPos, dir)) {
 					return count;
 				}
@@ -119,9 +128,9 @@ namespace Warfest {
 			}
 		}
 
-		void BuildRectangleMeshed(List<VoxelRect> rectangles, MeshData meshData, Chunk chunk) {
+		void BuildRectangleMeshed(List<VoxelRect> rectangles, MeshData meshData, Chunk chunk, Direction dir) {
 			foreach (var rect in rectangles) {
-				CreateVertexFace(meshData, rect);
+				CreateVertexFace(meshData, rect, dir);
 				AddQuadTriangles(meshData);
 
 				Vector2 colorUv = colorTexture.GetColorUV(
@@ -135,17 +144,66 @@ namespace Warfest {
 			}
 		}
 
-		void CreateVertexFace(MeshData meshData, VoxelRect rect) {
+		void CreateVertexFace(MeshData meshData, VoxelRect rect, Direction dir) {
 			var vertices = meshData.vertices;
 			float startX = rect.x;
 			float startY = rect.y;
 			float endX = rect.x + rect.width - 1;
 			float endY = rect.y + rect.height - 1;
 
-			vertices.Add(new Vector3(startX - 0.5f, startY - 0.5f, 0f - 0.5f));
-			vertices.Add(new Vector3(startX - 0.5f, endY   + 0.5f, 0f - 0.5f));
-			vertices.Add(new Vector3(endX   + 0.5f, endY   + 0.5f, 0f - 0.5f));
-			vertices.Add(new Vector3(endX   + 0.5f, startY - 0.5f, 0f - 0.5f));
+//			vertices.Add(new Vector3(startX - 0.5f, startY - 0.5f, 0f - 0.5f));
+//			vertices.Add(new Vector3(startX - 0.5f, endY   + 0.5f, 0f - 0.5f));
+//			vertices.Add(new Vector3(endX   + 0.5f, endY   + 0.5f, 0f - 0.5f));
+//			vertices.Add(new Vector3(endX   + 0.5f, startY - 0.5f, 0f - 0.5f));
+
+			switch (dir) {
+			case Direction.north:
+//				vertices.Add(new Vector3(pos.x + 0.5f, pos.y - 0.5f, pos.z + 0.5f));
+//				vertices.Add(new Vector3(pos.x + 0.5f, pos.y + 0.5f, pos.z + 0.5f));
+//				vertices.Add(new Vector3(pos.x - 0.5f, pos.y + 0.5f, pos.z + 0.5f));
+//				vertices.Add(new Vector3(pos.x - 0.5f, pos.y - 0.5f, pos.z + 0.5f));
+				vertices.Add(new Vector3(endX   + 0.5f, startY - 0.5f, 0f + 0.5f));
+				vertices.Add(new Vector3(endX   + 0.5f, endY   + 0.5f, 0f + 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, endY   + 0.5f, 0f + 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, startY - 0.5f, 0f + 0.5f));
+				break;
+			case Direction.east:
+//				vertices.Add(new Vector3(pos.x + 0.5f, pos.y - 0.5f, pos.z - 0.5f));
+//				vertices.Add(new Vector3(pos.x + 0.5f, pos.y + 0.5f, pos.z - 0.5f));
+//				vertices.Add(new Vector3(pos.x + 0.5f, pos.y + 0.5f, pos.z + 0.5f));
+//				vertices.Add(new Vector3(pos.x + 0.5f, pos.y - 0.5f, pos.z + 0.5f));
+				break;
+			case Direction.south:
+//				vertices.Add(new Vector3(pos.x - 0.5f, pos.y - 0.5f, pos.z - 0.5f));
+//				vertices.Add(new Vector3(pos.x - 0.5f, pos.y + 0.5f, pos.z - 0.5f));
+//				vertices.Add(new Vector3(pos.x + 0.5f, pos.y + 0.5f, pos.z - 0.5f));
+//				vertices.Add(new Vector3(pos.x + 0.5f, pos.y - 0.5f, pos.z - 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, startY - 0.5f, 0f - 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, endY   + 0.5f, 0f - 0.5f));
+				vertices.Add(new Vector3(endX   + 0.5f, endY   + 0.5f, 0f - 0.5f));
+				vertices.Add(new Vector3(endX   + 0.5f, startY - 0.5f, 0f - 0.5f));
+				break;
+			case Direction.west:
+//				vertices.Add(new Vector3(pos.x - 0.5f, pos.y - 0.5f, pos.z + 0.5f));
+//				vertices.Add(new Vector3(pos.x - 0.5f, pos.y + 0.5f, pos.z + 0.5f));
+//				vertices.Add(new Vector3(pos.x - 0.5f, pos.y + 0.5f, pos.z - 0.5f));
+//				vertices.Add(new Vector3(pos.x - 0.5f, pos.y - 0.5f, pos.z - 0.5f));
+				break;
+			case Direction.up:
+//				vertices.Add(new Vector3(pos.x - 0.5f, pos.y + 0.5f, pos.z + 0.5f));
+//				vertices.Add(new Vector3(pos.x + 0.5f, pos.y + 0.5f, pos.z + 0.5f));
+//				vertices.Add(new Vector3(pos.x + 0.5f, pos.y + 0.5f, pos.z - 0.5f));
+//				vertices.Add(new Vector3(pos.x - 0.5f, pos.y + 0.5f, pos.z - 0.5f));
+				break;
+			case Direction.down:
+//				vertices.Add(new Vector3(pos.x - 0.5f, pos.y - 0.5f, pos.z - 0.5f));
+//				vertices.Add(new Vector3(pos.x + 0.5f, pos.y - 0.5f, pos.z - 0.5f));
+//				vertices.Add(new Vector3(pos.x + 0.5f, pos.y - 0.5f, pos.z + 0.5f));
+//				vertices.Add(new Vector3(pos.x - 0.5f, pos.y - 0.5f, pos.z + 0.5f));
+				break;
+			default:
+				throw new System.Exception("Bad direction");
+			}
 		}
 
 		void AddQuadTriangles(MeshData meshData) {
