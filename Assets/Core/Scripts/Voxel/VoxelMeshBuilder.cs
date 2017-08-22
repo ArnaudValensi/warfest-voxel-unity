@@ -1,9 +1,15 @@
 ﻿using UnityEngine;
 
 namespace Warfest {
-	public static class VoxelMeshBuilder {
+	public class VoxelMeshBuilder : MonoBehaviour {
 
-		public static MeshData BuildMesh(Chunk chunk) {
+		ColorTexture colorTexture;
+
+		void Start() {
+			colorTexture = GameManager.Instance.GetColorTexture();
+		}
+
+		public MeshData BuildMesh(Chunk chunk) {
 			MeshData meshData = new MeshData();
 
 			for (int x = 0; x < chunk.SizeX; x++) {
@@ -19,7 +25,7 @@ namespace Warfest {
 			return meshData;
 		}
 
-		static MeshData Voxeldata(Chunk chunk, int x, int y, int z, MeshData meshData) {
+		MeshData Voxeldata(Chunk chunk, int x, int y, int z, MeshData meshData) {
 			Pos pos = new Pos(x, y, z);
 
 			foreach (var dir in DirectionUtils.Directions) {
@@ -30,7 +36,10 @@ namespace Warfest {
 					VoxelGeometry.CreateVertexFace(meshData, pos, dir);
 					VoxelGeometry.AddQuadTriangles(meshData);
 
-					Vector2 colorUv = chunk.GetVoxel(pos).colorUv;
+					Vector2 colorUv = colorTexture.GetColorUV(
+						chunk.GetVoxel(pos).color
+					);
+
 					meshData.uv.Add(colorUv);
 					meshData.uv.Add(colorUv);
 					meshData.uv.Add(colorUv);
@@ -41,7 +50,7 @@ namespace Warfest {
 			return meshData;
 		}
 
-		public static Mesh RenderMesh(MeshData meshData, MeshFilter filter, MeshCollider coll) {
+		public Mesh RenderMesh(MeshData meshData, MeshFilter filter, MeshCollider coll) {
 			MeshData data = (MeshData)meshData;
 
 			filter.mesh.Clear();

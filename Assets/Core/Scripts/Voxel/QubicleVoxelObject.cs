@@ -16,12 +16,14 @@ namespace Warfest {
 		MeshCollider meshCollider;
 		MeshRenderer meshRenderer;
 		ColorTexture colorTexture;
+		VoxelMeshBuilder voxelMeshBuilder;
 
 		void Start() {
 			meshFilter = GetComponent<MeshFilter>();
 			meshCollider = GetComponent<MeshCollider>();
 			meshRenderer = GetComponent<MeshRenderer>();
-			colorTexture = GameObject.Find("/Managers/ColorTexture").GetComponent<ColorTexture>();
+			colorTexture = GameManager.Instance.GetColorTexture();
+			voxelMeshBuilder = GameManager.Instance.GetVoxelMeshBuilder();
 
 			QBTFile qbtFile = LoadQubicleFile();
 			QBTFile.VoxelData[,,] qbtData = qbtFile.VoxelsData;
@@ -36,7 +38,7 @@ namespace Warfest {
 							chunk.SetVoxel(
 								x, y, z,
 								Voxel.Type.Solid,
-								colorTexture.GetColorUV(qbtData[x, y, z].Color)
+								qbtData[x, y, z].Color
 							);
 						}
 					}
@@ -44,8 +46,8 @@ namespace Warfest {
 			}
 
 			meshRenderer.sharedMaterial.mainTexture = colorTexture.Texture;
-			MeshData meshData = VoxelMeshBuilder.BuildMesh(chunk);
-			VoxelMeshBuilder.RenderMesh(meshData, meshFilter, meshCollider);
+			MeshData meshData = voxelMeshBuilder.BuildMesh(chunk);
+			voxelMeshBuilder.RenderMesh(meshData, meshFilter, meshCollider);
 		}
 
 		QBTFile LoadQubicleFile() {

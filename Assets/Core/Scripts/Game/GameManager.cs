@@ -10,15 +10,17 @@ namespace Warfest {
 
 		bool gameLoading;
 
-//		LuminaWorld world;
+		VoxelMeshBuilder voxelMeshBuilder;
+		ColorTexture colorTexture;
 
 		//----------------------------------------------------------------------------
 		// Lifecycle
 		//----------------------------------------------------------------------------
 
 		void Start() {
-			if (SceneManager.GetActiveScene().name == "Game-01") {
-				NewGame();
+			if (SceneManager.GetActiveScene().name == "Scene-01") {
+//				NewGame();
+				InitGame();
 			}
 		}
 
@@ -69,9 +71,8 @@ namespace Warfest {
 		}
 
 		void InitGame() {
-//			world = GameObject.Find("/World").GetComponent<LuminaWorld>();
-//
-//			world.Init();
+			voxelMeshBuilder = GameObject.Find("/Managers/VoxelMeshBuilder").GetComponent<VoxelMeshBuilder>();
+			colorTexture = GameObject.Find("/Managers/ColorTexture").GetComponent<ColorTexture>();
 		}
 
 		//----------------------------------------------------------------------------
@@ -97,9 +98,13 @@ namespace Warfest {
 		// Accessors
 		//----------------------------------------------------------------------------
 
-//		public LuminaWorld GetLuminaWorld() {
-//			return world;
-//		}
+		public VoxelMeshBuilder GetVoxelMeshBuilder() {
+			return voxelMeshBuilder;
+		}
+
+		public ColorTexture GetColorTexture() {
+			return colorTexture;
+		}
 
 	}
 }

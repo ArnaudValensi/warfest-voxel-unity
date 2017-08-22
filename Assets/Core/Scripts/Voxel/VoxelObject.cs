@@ -13,17 +13,19 @@ namespace Warfest {
 		Chunk chunk;
 		MeshFilter meshFilter;
 		MeshCollider meshCollider;
+		VoxelMeshBuilder voxelMeshBuilder;
 
 		void Start() {
 			meshFilter = GetComponent<MeshFilter>();
 			meshCollider = GetComponent<MeshCollider>();
+			voxelMeshBuilder = GameManager.Instance.GetVoxelMeshBuilder();
 
 			chunk = new Chunk(sizeX, sizeY, sizeZ);
-			chunk.SetVoxel(0, 0, 0, Voxel.Type.Solid, Vector2.zero);
-			chunk.SetVoxel(1, 0, 0, Voxel.Type.Solid, Vector2.zero);
+			chunk.SetVoxel(0, 0, 0, Voxel.Type.Solid, Color.black);
+			chunk.SetVoxel(1, 0, 0, Voxel.Type.Solid, Color.black);
 
-			MeshData meshData = VoxelMeshBuilder.BuildMesh(chunk);
-			VoxelMeshBuilder.RenderMesh(meshData, meshFilter, meshCollider);
+			MeshData meshData = voxelMeshBuilder.BuildMesh(chunk);
+			voxelMeshBuilder.RenderMesh(meshData, meshFilter, meshCollider);
 		}
 
 	}
