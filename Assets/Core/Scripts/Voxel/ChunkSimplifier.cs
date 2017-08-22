@@ -17,6 +17,8 @@ namespace Warfest {
 
 			BuildFace(meshData, chunk, Direction.south);
 			BuildFace(meshData, chunk, Direction.north);
+			BuildFace(meshData, chunk, Direction.west);
+//			BuildFace(meshData, chunk, Direction.east);
 
 			return meshData;
 		}
@@ -152,6 +154,8 @@ namespace Warfest {
 				return new VoxelRect(x, y, width, height);
 			case Direction.west:
 				return rect;
+			case Direction.east:
+				return rect;
 			default:
 				throw new System.Exception("Bad direction");
 			}
@@ -203,6 +207,10 @@ namespace Warfest {
 //				vertices.Add(new Vector3(pos.x + 0.5f, pos.y + 0.5f, pos.z - 0.5f));
 //				vertices.Add(new Vector3(pos.x + 0.5f, pos.y + 0.5f, pos.z + 0.5f));
 //				vertices.Add(new Vector3(pos.x + 0.5f, pos.y - 0.5f, pos.z + 0.5f));
+				vertices.Add(new Vector3(endX + 0.5f, startY - 0.5f, 0f - 0.5f));
+				vertices.Add(new Vector3(endX + 0.5f, endY   + 0.5f, 0f - 0.5f));
+				vertices.Add(new Vector3(endX + 0.5f, endY   + 0.5f, 0f + 0.5f));
+				vertices.Add(new Vector3(endX + 0.5f, startY - 0.5f, 0f + 0.5f));
 				break;
 			case Direction.south:
 //				vertices.Add(new Vector3(pos.x - 0.5f, pos.y - 0.5f, pos.z - 0.5f));

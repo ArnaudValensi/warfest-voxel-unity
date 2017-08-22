@@ -45,13 +45,13 @@ namespace Warfest {
 			case Direction.north:
 				return voxels[SizeX - x - 1, y, SizeZ - z - 1];
 			case Direction.west:
-				return voxels[SizeZ - z - 1, y, x];
+				return voxels[z, y, SizeZ - x - 1];
 			case Direction.east:
-				return voxels[z, y, SizeX - x - 1];
+				return voxels[SizeX - z - 1, y, x];
 			case Direction.up:
-				return voxels[x, z, SizeY - y - 1];
+				return voxels[x, SizeY - z - 1, y];
 			case Direction.down:
-				return voxels[x, SizeZ - z - 1, y];
+				return voxels[x, z, SizeZ - y - 1];
 			default:
 				throw new System.Exception("Bad direction");
 			}
