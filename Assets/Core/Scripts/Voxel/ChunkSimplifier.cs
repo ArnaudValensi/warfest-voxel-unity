@@ -160,7 +160,6 @@ namespace Warfest {
 			case Direction.west:
 				return rect;
 			case Direction.east:
-				Debug.Log("chunkSizeZ: " + chunkSizeZ + ", rect.z: " + rect.z);
 				return new VoxelRect(rect.x, rect.y, chunkSizeZ - rect.z - 1, rect.width, rect.height);
 			case Direction.up:
 				return new VoxelRect(rect.x, rect.y, chunkSizeZ - rect.z - 1, rect.width, rect.height);
@@ -197,72 +196,42 @@ namespace Warfest {
 			float endY = rect.y + rect.height - 1;
 			float z = rect.z;
 
-//			vertices.Add(new Vector3(startX - 0.5f, startY - 0.5f, 0f - 0.5f));
-//			vertices.Add(new Vector3(startX - 0.5f, endY   + 0.5f, 0f - 0.5f));
-//			vertices.Add(new Vector3(endX   + 0.5f, endY   + 0.5f, 0f - 0.5f));
-//			vertices.Add(new Vector3(endX   + 0.5f, startY - 0.5f, 0f - 0.5f));
-
 			switch (dir) {
 			case Direction.north:
-//				vertices.Add(new Vector3(pos.x + 0.5f, pos.y - 0.5f, pos.z + 0.5f));
-//				vertices.Add(new Vector3(pos.x + 0.5f, pos.y + 0.5f, pos.z + 0.5f));
-//				vertices.Add(new Vector3(pos.x - 0.5f, pos.y + 0.5f, pos.z + 0.5f));
-//				vertices.Add(new Vector3(pos.x - 0.5f, pos.y - 0.5f, pos.z + 0.5f));
-				vertices.Add(new Vector3(endX   + 0.5f, startY - 0.5f, 0f + 0.5f));
-				vertices.Add(new Vector3(endX   + 0.5f, endY   + 0.5f, 0f + 0.5f));
-				vertices.Add(new Vector3(startX - 0.5f, endY   + 0.5f, 0f + 0.5f));
-				vertices.Add(new Vector3(startX - 0.5f, startY - 0.5f, 0f + 0.5f));
+				vertices.Add(new Vector3(endX   + 0.5f, startY - 0.5f, z + 0.5f));
+				vertices.Add(new Vector3(endX   + 0.5f, endY   + 0.5f, z + 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, endY   + 0.5f, z + 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, startY - 0.5f, z + 0.5f));
 				break;
 			case Direction.east:
-				Debug.Log("z: " + z);
-//				vertices.Add(new Vector3(pos.x + 0.5f, pos.y - 0.5f, pos.z - 0.5f));
-//				vertices.Add(new Vector3(pos.x + 0.5f, pos.y + 0.5f, pos.z - 0.5f));
-//				vertices.Add(new Vector3(pos.x + 0.5f, pos.y + 0.5f, pos.z + 0.5f));
-//				vertices.Add(new Vector3(pos.x + 0.5f, pos.y - 0.5f, pos.z + 0.5f));
 				vertices.Add(new Vector3(z + endX + 0.5f, startY - 0.5f, 0f - 0.5f));
 				vertices.Add(new Vector3(z + endX + 0.5f, endY   + 0.5f, 0f - 0.5f));
 				vertices.Add(new Vector3(z + endX + 0.5f, endY   + 0.5f, 0f + 0.5f));
 				vertices.Add(new Vector3(z + endX + 0.5f, startY - 0.5f, 0f + 0.5f));
 				break;
 			case Direction.south:
-//				vertices.Add(new Vector3(pos.x - 0.5f, pos.y - 0.5f, pos.z - 0.5f));
-//				vertices.Add(new Vector3(pos.x - 0.5f, pos.y + 0.5f, pos.z - 0.5f));
-//				vertices.Add(new Vector3(pos.x + 0.5f, pos.y + 0.5f, pos.z - 0.5f));
-//				vertices.Add(new Vector3(pos.x + 0.5f, pos.y - 0.5f, pos.z - 0.5f));
-				vertices.Add(new Vector3(startX - 0.5f, startY - 0.5f, 0f - 0.5f));
-				vertices.Add(new Vector3(startX - 0.5f, endY   + 0.5f, 0f - 0.5f));
-				vertices.Add(new Vector3(endX   + 0.5f, endY   + 0.5f, 0f - 0.5f));
-				vertices.Add(new Vector3(endX   + 0.5f, startY - 0.5f, 0f - 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, startY - 0.5f, z - 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, endY   + 0.5f, z - 0.5f));
+				vertices.Add(new Vector3(endX   + 0.5f, endY   + 0.5f, z - 0.5f));
+				vertices.Add(new Vector3(endX   + 0.5f, startY - 0.5f, z - 0.5f));
 				break;
 			case Direction.west:
-//				vertices.Add(new Vector3(pos.x - 0.5f, pos.y - 0.5f, pos.z + 0.5f));
-//				vertices.Add(new Vector3(pos.x - 0.5f, pos.y + 0.5f, pos.z + 0.5f));
-//				vertices.Add(new Vector3(pos.x - 0.5f, pos.y + 0.5f, pos.z - 0.5f));
-//				vertices.Add(new Vector3(pos.x - 0.5f, pos.y - 0.5f, pos.z - 0.5f));
-				vertices.Add(new Vector3(startX - 0.5f, startY - 0.5f, 0f + 0.5f));
-				vertices.Add(new Vector3(startX - 0.5f, endY   + 0.5f, 0f + 0.5f));
-				vertices.Add(new Vector3(startX - 0.5f, endY   + 0.5f, 0f - 0.5f));
-				vertices.Add(new Vector3(startX - 0.5f, startY - 0.5f, 0f - 0.5f));
+				vertices.Add(new Vector3(z + startX - 0.5f, startY - 0.5f, 0f + 0.5f));
+				vertices.Add(new Vector3(z + startX - 0.5f, endY   + 0.5f, 0f + 0.5f));
+				vertices.Add(new Vector3(z + startX - 0.5f, endY   + 0.5f, 0f - 0.5f));
+				vertices.Add(new Vector3(z + startX - 0.5f, startY - 0.5f, 0f - 0.5f));
 				break;
 			case Direction.up:
-//				vertices.Add(new Vector3(pos.x - 0.5f, pos.y + 0.5f, pos.z + 0.5f));
-//				vertices.Add(new Vector3(pos.x + 0.5f, pos.y + 0.5f, pos.z + 0.5f));
-//				vertices.Add(new Vector3(pos.x + 0.5f, pos.y + 0.5f, pos.z - 0.5f));
-//				vertices.Add(new Vector3(pos.x - 0.5f, pos.y + 0.5f, pos.z - 0.5f));
 				vertices.Add(new Vector3(startX - 0.5f, z + endY + 0.5f, 0f + 0.5f));
 				vertices.Add(new Vector3(endX   + 0.5f, z + endY + 0.5f, 0f + 0.5f));
 				vertices.Add(new Vector3(endX   + 0.5f, z + endY + 0.5f, 0f - 0.5f));
 				vertices.Add(new Vector3(startX - 0.5f, z + endY + 0.5f, 0f - 0.5f));
 				break;
 			case Direction.down:
-//				vertices.Add(new Vector3(pos.x - 0.5f, pos.y - 0.5f, pos.z - 0.5f));
-//				vertices.Add(new Vector3(pos.x + 0.5f, pos.y - 0.5f, pos.z - 0.5f));
-//				vertices.Add(new Vector3(pos.x + 0.5f, pos.y - 0.5f, pos.z + 0.5f));
-//				vertices.Add(new Vector3(pos.x - 0.5f, pos.y - 0.5f, pos.z + 0.5f));
-				vertices.Add(new Vector3(startX - 0.5f, startY - 0.5f, 0f - 0.5f));
-				vertices.Add(new Vector3(endX   + 0.5f, startY - 0.5f, 0f - 0.5f));
-				vertices.Add(new Vector3(endX   + 0.5f, startY - 0.5f, 0f + 0.5f));
-				vertices.Add(new Vector3(startX - 0.5f, startY - 0.5f, 0f + 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, z + startY - 0.5f, 0f - 0.5f));
+				vertices.Add(new Vector3(endX   + 0.5f, z + startY - 0.5f, 0f - 0.5f));
+				vertices.Add(new Vector3(endX   + 0.5f, z + startY - 0.5f, 0f + 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, z + startY - 0.5f, 0f + 0.5f));
 				break;
 			default:
 				throw new System.Exception("Bad direction");
