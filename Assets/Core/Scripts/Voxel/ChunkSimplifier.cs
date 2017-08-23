@@ -15,61 +15,6 @@ namespace Warfest {
 		public MeshData BuildMesh(Chunk chunk) {
 			MeshData meshData = new MeshData();
 
-//			// North
-//			int nbLayers = chunk.SizeZBasedOnPlan(Direction.north);
-//
-//			for (int i = 0; i < nbLayers; i++) {
-//				BuildFace(meshData, chunk, Direction.north, i);
-//			}
-//
-//			// South
-//			nbLayers = chunk.SizeZBasedOnPlan(Direction.south);
-//
-//			for (int i = 0; i < nbLayers; i++) {
-//				BuildFace(meshData, chunk, Direction.south, i);
-//			}
-//
-//			// Up
-//			nbLayers = chunk.SizeZBasedOnPlan(Direction.up);
-//
-//			for (int i = 0; i < nbLayers; i++) {
-//				BuildFace(meshData, chunk, Direction.up, i);
-//			}
-//
-//			// Down
-//			nbLayers = chunk.SizeZBasedOnPlan(Direction.down);
-//
-//			for (int i = 0; i < nbLayers; i++) {
-//				BuildFace(meshData, chunk, Direction.down, i);
-//			}
-//
-//			// West
-//			nbLayers = chunk.SizeZBasedOnPlan(Direction.west);
-//
-//			for (int i = 0; i < nbLayers; i++) {
-//				BuildFace(meshData, chunk, Direction.west, i);
-//			}
-//
-//			// East
-//			nbLayers = chunk.SizeZBasedOnPlan(Direction.east);
-//
-//			for (int i = 0; i < nbLayers; i++) {
-//				BuildFace(meshData, chunk, Direction.east, i);
-//			}
-
-//			Debug.Log("==== north ====");
-//			BuildFace(meshData, chunk, Direction.north, 0);
-//			Debug.Log("==== south ====");
-//			BuildFace(meshData, chunk, Direction.south, 0);
-//			Debug.Log("==== west ====");
-//			BuildFace(meshData, chunk, Direction.west, 0);
-//			Debug.Log("==== east ====");
-//			BuildFace(meshData, chunk, Direction.east, 0);
-//			Debug.Log("==== up ====");
-//			BuildFace(meshData, chunk, Direction.up, 0);
-//			Debug.Log("==== down ====");
-//			BuildFace(meshData, chunk, Direction.down, 0);
-
 			foreach (var dir in DirectionUtils.Directions) {
 				int nbLayers = chunk.SizeZBasedOnPlan(dir);
 
@@ -101,8 +46,6 @@ namespace Warfest {
 				rectangles.Add(rect);
 
 				SetUsedPos(usedPos, rect);
-
-				Debug.LogFormat("pos: {0}, lineSize: {1}, compatibleLines: {2}", pos, lineSize, compatibleLines);
 
 				pos = GetNextPos(usedPos, pos, layer, chunk, dir);
 			}
@@ -356,19 +299,17 @@ namespace Warfest {
 		}
 
 		public Mesh RenderMesh(MeshData meshData, MeshFilter filter, MeshCollider coll) {
-			MeshData data = (MeshData)meshData;
-
 			filter.mesh.Clear();
-			filter.mesh.vertices = data.vertices.ToArray();
-			filter.mesh.triangles = data.triangles.ToArray();
+			filter.mesh.vertices = meshData.vertices.ToArray();
+			filter.mesh.triangles = meshData.triangles.ToArray();
 
-			filter.mesh.uv = data.uv.ToArray();
+			filter.mesh.uv = meshData.uv.ToArray();
 			filter.mesh.RecalculateNormals();
 
 			coll.sharedMesh = null;
 			Mesh mesh = new Mesh();
-			mesh.vertices = data.vertices.ToArray();
-			mesh.triangles = data.triangles.ToArray();
+			mesh.vertices = meshData.vertices.ToArray();
+			mesh.triangles = meshData.triangles.ToArray();
 			mesh.RecalculateNormals();
 
 			coll.sharedMesh = mesh;
