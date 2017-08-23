@@ -28,11 +28,9 @@ namespace Warfest {
 
 		public void AddColors(Color32[] colors) {
 			for (int i = 0; i < colors.Length; i++) {
-				int x = (colorIndex + i) % size;
-				int y = (colorIndex + i) / size;
+				int x = colorIndex % size;
+				int y = colorIndex / size;
 				Color32 color = colors[i];
-
-				Debug.Log("[ColorTexture] color: " + color);
 
 				if (!colorToUv.ContainsKey(color)) {
 					texture.SetPixel(x, y, color);

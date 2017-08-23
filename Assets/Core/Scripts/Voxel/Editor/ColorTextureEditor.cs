@@ -44,8 +44,6 @@ namespace Warfest {
 				for (int x = 0; x < baseWidth; x++) {
 					Color32 color = texture.GetPixel(x, y);
 
-					Debug.Log("[ColorTextureEditor] Color: " + color);
-
 					for (int j = 0; j < scaleFactor; j++) {
 						for (int i = 0; i < scaleFactor; i++) {
 							scaledTexture.SetPixel(x * scaleFactor + i, y * scaleFactor + j, color);
