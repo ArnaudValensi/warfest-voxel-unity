@@ -7,7 +7,10 @@ namespace Warfest {
 	[RequireComponent(typeof(MeshCollider))]
 	public class VoxelModel : MonoBehaviour {
 
-		[SerializeField] string modelName = null;
+		public string modelName;
+
+		bool isStarted = false;
+		public bool IsStarted { get { return isStarted; } }
 
 		Chunk chunk;
 
@@ -31,6 +34,12 @@ namespace Warfest {
 			meshRenderer = GetComponent<MeshRenderer>();
 
 			LoadModel();
+
+			isStarted = true;
+		}
+
+		void OnApplicationQuit() {
+			Debug.Log("[VoxelModel] OnApplicationQuit");
 		}
 
 //		void OnValidate() {
@@ -53,6 +62,15 @@ namespace Warfest {
 
 			MeshData meshData = chunkSimplifier.BuildMesh(chunk);
 			chunkSimplifier.RenderMesh(meshData, meshFilter, meshCollider);
+		}
+
+		public string[] GetAvailableModelNames() {
+			return gameResources.GetAvailableModelNames();
+		}
+
+		public void SetModel(string modelName) {
+			this.modelName = modelName;
+			LoadModel();
 		}
 
 	}

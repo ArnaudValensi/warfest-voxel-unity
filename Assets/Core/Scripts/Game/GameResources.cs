@@ -63,5 +63,12 @@ namespace Warfest {
 			return models[modelName];
 		}
 
+		public string[] GetAvailableModelNames() {
+			if (models == null) {
+				return new string[0];
+			}
+			return models.Keys.ToArray();
+		}
+
 	}
 }
