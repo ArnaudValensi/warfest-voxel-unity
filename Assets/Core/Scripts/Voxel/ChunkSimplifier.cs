@@ -113,6 +113,10 @@ namespace Warfest {
 		Vector2 GetNextPos(HashSet<Vector2> usedPos, Vector2 pos, int z, Chunk chunk, Direction dir) {
 			int x = (int)pos.x;
 
+			bool isAlreadyUsed;
+			bool isSolidVoxel;
+			bool isFaceVisible;
+
 			int chunkSizeX = chunk.SizeXBasedOnPlan(dir);
 			int chunkSizeY = chunk.SizeYBasedOnPlan(dir);
 
@@ -120,7 +124,11 @@ namespace Warfest {
 				for (; x < chunkSizeX; x++) {
 					Vector2 currentPos = new Vector2(x, y);
 
-					if (!usedPos.Contains(currentPos) && chunk.GetVoxelBasedOnPlan(x, y, z, dir).IsSolid) {
+					isAlreadyUsed = usedPos.Contains(currentPos);
+					isSolidVoxel = chunk.GetVoxelBasedOnPlan(x, y, z, dir).IsSolid;
+					isFaceVisible = IsFaceVisible(x, y, z, chunk, dir);
+
+					if (!isAlreadyUsed && isSolidVoxel && isFaceVisible) {
 						return currentPos;
 					}
 				}
@@ -131,13 +139,28 @@ namespace Warfest {
 			return endPos;
 		}
 
+		bool IsFaceVisible(int x, int y, int z, Chunk chunk, Direction dir) {
+			if (z == 0) {
+				return true;
+			}
+
+			return chunk.GetVoxelBasedOnPlan(x, y, z - 1, dir).IsAir;
+		}
+
 		int GetSimilarVoxelCountNextToThisPos(Vector2 pos, int z, Color32 color, Chunk chunk, HashSet<Vector2> usedPos, Direction dir) {
 			int count = 1;
-
 			int chunkSizeX = chunk.SizeXBasedOnPlan(dir);
 
+			bool isAlreadyUsed;
+			bool isSameColor;
+			bool isFaceVisible;
+
 			for (int x = (int)pos.x + 1; x < chunkSizeX; x++) {
-				if (usedPos.Contains(new Vector2(x, pos.y)) || !chunk.GetVoxelBasedOnPlan(x, (int)pos.y, z, dir).color.Equals(color)) {
+				isAlreadyUsed = usedPos.Contains(new Vector2(x, pos.y));
+				isSameColor = chunk.GetVoxelBasedOnPlan(x, (int)pos.y, z, dir).color.Equals(color);
+				isFaceVisible = IsFaceVisible(x, (int)pos.y, z, chunk, dir);
+
+				if (isAlreadyUsed || !isSameColor || !isFaceVisible) {
 					return count;
 				}
 
@@ -149,11 +172,18 @@ namespace Warfest {
 
 		bool IsLineCompatible(Vector2 pos, int z, int lineSize, Color32 color, Chunk chunk, HashSet<Vector2> usedPos, Direction dir) {
 			int count = 0;
-
 			int chunkSizeX = chunk.SizeXBasedOnPlan(dir);
 
+			bool isAlreadyUsed;
+			bool isSameColor;
+			bool isFaceVisible;
+
 			for (int x = (int)pos.x; x < chunkSizeX && count < lineSize; x++) {
-				if (!usedPos.Contains(new Vector2(x, pos.y)) && chunk.GetVoxelBasedOnPlan(x, (int)pos.y, z, dir).color.Equals(color)) {
+				isAlreadyUsed = usedPos.Contains(new Vector2(x, pos.y));
+				isSameColor = chunk.GetVoxelBasedOnPlan(x, (int)pos.y, z, dir).color.Equals(color);
+				isFaceVisible = IsFaceVisible(x, (int)pos.y, z, chunk, dir);
+
+				if (!isAlreadyUsed && isSameColor && isFaceVisible) {
 					count++;
 				} else {
 					return false;
