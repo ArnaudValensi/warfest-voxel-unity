@@ -26,7 +26,7 @@ namespace Warfest {
 			ColorTexture colorTexture = GameObject.Find("/Managers/ColorTexture").GetComponent<ColorTexture>();
 
 			foreach (string file in Directory.GetFiles(qbtPath, "*.qbt")) {
-				string filename = Path.GetFileName(file);
+				string filename = Path.GetFileNameWithoutExtension(file);
 
 				Debug.Log("[GameResources] Loading " + filename);
 
