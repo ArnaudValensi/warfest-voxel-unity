@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 namespace Warfest {
+	[ExecuteInEditMode]
 	public class ChunkSimplifier : MonoBehaviour {
 
 		readonly Vector2 endPos = new Vector2(-1, -1);
@@ -9,7 +10,7 @@ namespace Warfest {
 		ColorTexture colorTexture;
 
 		void Start() {
-			colorTexture = GameManager.Instance.GetColorTexture();
+			colorTexture = GameObject.Find("/Managers/ColorTexture").GetComponent<ColorTexture>();
 		}
 
 		public MeshData BuildMesh(Chunk chunk) {
@@ -299,22 +300,22 @@ namespace Warfest {
 		}
 
 		public Mesh RenderMesh(MeshData meshData, MeshFilter filter, MeshCollider coll) {
-			filter.mesh.Clear();
-			filter.mesh.vertices = meshData.vertices.ToArray();
-			filter.mesh.triangles = meshData.triangles.ToArray();
+			filter.sharedMesh.Clear();
+			filter.sharedMesh.vertices = meshData.vertices.ToArray();
+			filter.sharedMesh.triangles = meshData.triangles.ToArray();
 
-			filter.mesh.uv = meshData.uv.ToArray();
-			filter.mesh.RecalculateNormals();
+			filter.sharedMesh.uv = meshData.uv.ToArray();
+			filter.sharedMesh.RecalculateNormals();
 
 			coll.sharedMesh = null;
-			Mesh mesh = new Mesh();
-			mesh.vertices = meshData.vertices.ToArray();
-			mesh.triangles = meshData.triangles.ToArray();
-			mesh.RecalculateNormals();
+			Mesh collMesh = new Mesh();
+			collMesh.vertices = meshData.vertices.ToArray();
+			collMesh.triangles = meshData.triangles.ToArray();
+			collMesh.RecalculateNormals();
 
-			coll.sharedMesh = mesh;
+			coll.sharedMesh = collMesh;
 
-			return filter.mesh;
+			return filter.sharedMesh;
 		}
 
 		public class VoxelRect {

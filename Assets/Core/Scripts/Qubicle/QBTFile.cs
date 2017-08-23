@@ -12,6 +12,7 @@ public class QBTFile {
 	public HashSet<Color32> Colors { get { return colors; } }
 
 	bool mergeCompounds = false;
+	bool showLogs = false;
 
 	public QBTFile(string path) {
 		colors = new HashSet<Color32>();
@@ -27,7 +28,9 @@ public class QBTFile {
 		byte major = stream.ReadByte();
 		byte minor = stream.ReadByte();
 
-		Debug.LogFormat("[QBT] version {0}.{1}", major, minor);
+		if (showLogs) {
+			Debug.LogFormat("[QBT] version {0}.{1}", major, minor);
+		}
 
 		if (magic != 0x32204251) {
 			throw new UnityException("magic does not match. Expected: " + 0x32204251 + ", got: " + magic);
@@ -47,7 +50,9 @@ public class QBTFile {
 
 		uint colorCount = stream.ReadUInt32();
 
-		Debug.LogFormat("[QBT] color count: {0}", colorCount);
+		if (showLogs) {
+			Debug.LogFormat("[QBT] color count: {0}", colorCount);
+		}
 
 		int[] colors = new int[colorCount];
 		for (uint i = 0; i < colorCount; i++) {
@@ -85,7 +90,9 @@ public class QBTFile {
 	}
 
 	void LoadModel(BinaryReader stream) {
-		Debug.Log("[QBT] LoadModel");
+		if (showLogs) {
+			Debug.Log("[QBT] LoadModel");
+		}
 
 		uint childCount = stream.ReadUInt32();
 		for (uint i = 0; i < childCount; i++) {
@@ -94,12 +101,16 @@ public class QBTFile {
 	}
 
 	void LoadMatrix(BinaryReader stream) {
-		Debug.Log("[QBT] LoadMatrix");
+		if (showLogs) {
+			Debug.Log("[QBT] LoadMatrix");
+		}
 
 		int nameLength = stream.ReadInt32();
 		string name = new string(stream.ReadChars(nameLength));
 
-		Debug.Log("[QBT] name: " + name);
+		if (showLogs) {
+			Debug.Log("[QBT] name: " + name);
+		}
 
 		Vector3 position = new Vector3();
 		position.x = stream.ReadInt32();
@@ -145,12 +156,16 @@ public class QBTFile {
 	}
 
 	void LoadCompound(BinaryReader stream) {
-		Debug.Log("[QBT] LoadCompound");
+		if (showLogs) {
+			Debug.Log("[QBT] LoadCompound");
+		}
 
 		int nameLength = stream.ReadInt32();
 		string name = new string(stream.ReadChars(nameLength));
 
-		Debug.Log("[QBT] name: " + name);
+		if (showLogs) {
+			Debug.Log("[QBT] name: " + name);
+		}
 
 		Vector3 position = new Vector3();
 		position.x = stream.ReadInt32();
@@ -207,7 +222,9 @@ public class QBTFile {
 	}
 
 	void SkipNode(BinaryReader stream) {
-		Debug.Log("[QBT] SkipNode");
+		if (showLogs) {
+			Debug.Log("[QBT] SkipNode");
+		}
 
 		stream.ReadInt32(); // node type, can be ignored
 		uint dataSize = stream.ReadUInt32();

@@ -7,9 +7,9 @@ namespace Warfest {
 	[RequireComponent(typeof(MeshCollider))]
 	public class QubicleVoxelObject : MonoBehaviour {
 
-		public int sizeX;
-		public int sizeY;
-		public int sizeZ;
+		[ReadOnly][SerializeField] int sizeX;
+		[ReadOnly][SerializeField] int sizeY;
+		[ReadOnly][SerializeField] int sizeZ;
 
 		Chunk chunk;
 		MeshFilter meshFilter;
@@ -32,9 +32,9 @@ namespace Warfest {
 
 			colorTexture.AddColors(qbtFile.Colors.ToArray());
 
-			int sizeX = qbtData.GetLength(0);
-			int sizeY = qbtData.GetLength(1);
-			int sizeZ = qbtData.GetLength(2);
+			sizeX = qbtData.GetLength(0);
+			sizeY = qbtData.GetLength(1);
+			sizeZ = qbtData.GetLength(2);
 
 			chunk = new Chunk(sizeX, sizeY, sizeZ);
 			for (int x = 0; x < sizeX; x++) {
