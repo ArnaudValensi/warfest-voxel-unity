@@ -32,6 +32,8 @@ namespace Warfest {
 				int y = (colorIndex + i) / size;
 				Color32 color = colors[i];
 
+				Debug.Log("[ColorTexture] color: " + color);
+
 				if (!colorToUv.ContainsKey(color)) {
 					texture.SetPixel(x, y, color);
 					colorToUv.Add(color, new Vector2((float)x / size, (float)y / size));

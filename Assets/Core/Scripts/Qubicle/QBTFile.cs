@@ -241,7 +241,7 @@ public class QBTFile {
 			return r + ", " + g + ", " + b + ", " + m;
 		}
 
-		public Color Color { get { return new Color32(r, g, b, (byte)1); } }
+		public Color Color { get { return new Color32(r, g, b, byte.MaxValue); } }
 	}
 
 }
