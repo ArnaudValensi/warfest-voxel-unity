@@ -15,6 +15,48 @@ namespace Warfest {
 		public MeshData BuildMesh(Chunk chunk) {
 			MeshData meshData = new MeshData();
 
+//			// North
+//			int nbLayers = chunk.SizeZBasedOnPlan(Direction.north);
+//
+//			for (int i = 0; i < nbLayers; i++) {
+//				BuildFace(meshData, chunk, Direction.north, i);
+//			}
+//
+//			// South
+//			nbLayers = chunk.SizeZBasedOnPlan(Direction.south);
+//
+//			for (int i = 0; i < nbLayers; i++) {
+//				BuildFace(meshData, chunk, Direction.south, i);
+//			}
+//
+//			// Up
+//			nbLayers = chunk.SizeZBasedOnPlan(Direction.up);
+//
+//			for (int i = 0; i < nbLayers; i++) {
+//				BuildFace(meshData, chunk, Direction.up, i);
+//			}
+//
+//			// Down
+//			nbLayers = chunk.SizeZBasedOnPlan(Direction.down);
+//
+//			for (int i = 0; i < nbLayers; i++) {
+//				BuildFace(meshData, chunk, Direction.down, i);
+//			}
+//
+//			// West
+//			nbLayers = chunk.SizeZBasedOnPlan(Direction.west);
+//
+//			for (int i = 0; i < nbLayers; i++) {
+//				BuildFace(meshData, chunk, Direction.west, i);
+//			}
+//
+//			// East
+//			nbLayers = chunk.SizeZBasedOnPlan(Direction.east);
+//
+//			for (int i = 0; i < nbLayers; i++) {
+//				BuildFace(meshData, chunk, Direction.east, i);
+//			}
+
 //			Debug.Log("==== north ====");
 //			BuildFace(meshData, chunk, Direction.north, 0);
 //			Debug.Log("==== south ====");
@@ -148,12 +190,6 @@ namespace Warfest {
 		}
 
 		VoxelRect GetRegularPlanRect(VoxelRect rect, Direction originalDir, Chunk chunk) {
-			float x;
-			float y;
-			float z;
-			float width;
-			float height;
-
 			if (originalDir == Direction.south) {
 				return rect;
 			}
@@ -164,21 +200,45 @@ namespace Warfest {
 
 			switch (originalDir) {
 			case Direction.north:
-				x = chunkSizeX - rect.x - rect.width;
-				y = rect.y;
-				z = rect.z;
-				width = rect.width;
-				height = rect.height;
-
-				return new VoxelRect(x, y, z, width, height);
+				return new VoxelRect(
+					chunkSizeX - rect.x - rect.width,
+					rect.y,
+					chunkSizeZ - rect.z - 1,
+					rect.width,
+					rect.height
+				);
 			case Direction.west:
-				return rect;
+				return new VoxelRect(
+					chunkSizeX - rect.x - rect.width,
+					rect.y,
+					rect.z,
+					rect.width,
+					rect.height
+				);
 			case Direction.east:
-				return new VoxelRect(rect.x, rect.y, chunkSizeZ - rect.z - 1, rect.width, rect.height);
+				return new VoxelRect(
+					rect.x,
+					rect.y,
+					chunkSizeZ - rect.z - 1,
+					rect.width,
+					rect.height
+				);
 			case Direction.up:
-				return new VoxelRect(rect.x, rect.y, chunkSizeZ - rect.z - 1, rect.width, rect.height);
+				return new VoxelRect(
+					rect.x,
+					rect.y,
+					chunkSizeZ - rect.z - 1,
+					rect.width,
+					rect.height
+				);
 			case Direction.down:
-				return rect;
+				return new VoxelRect(
+					rect.x,
+					chunkSizeY - rect.y - rect.height,
+					rect.z,
+					rect.width,
+					rect.height
+				);
 			default:
 				throw new System.Exception("Bad direction");
 			}
@@ -217,12 +277,6 @@ namespace Warfest {
 				vertices.Add(new Vector3(startX - 0.5f, endY   + 0.5f, z + 0.5f));
 				vertices.Add(new Vector3(startX - 0.5f, startY - 0.5f, z + 0.5f));
 				break;
-			case Direction.east:
-				vertices.Add(new Vector3(z + endX + 0.5f, startY - 0.5f, 0f - 0.5f));
-				vertices.Add(new Vector3(z + endX + 0.5f, endY   + 0.5f, 0f - 0.5f));
-				vertices.Add(new Vector3(z + endX + 0.5f, endY   + 0.5f, 0f + 0.5f));
-				vertices.Add(new Vector3(z + endX + 0.5f, startY - 0.5f, 0f + 0.5f));
-				break;
 			case Direction.south:
 				vertices.Add(new Vector3(startX - 0.5f, startY - 0.5f, z - 0.5f));
 				vertices.Add(new Vector3(startX - 0.5f, endY   + 0.5f, z - 0.5f));
@@ -230,22 +284,28 @@ namespace Warfest {
 				vertices.Add(new Vector3(endX   + 0.5f, startY - 0.5f, z - 0.5f));
 				break;
 			case Direction.west:
-				vertices.Add(new Vector3(z + startX - 0.5f, startY - 0.5f, 0f + 0.5f));
-				vertices.Add(new Vector3(z + startX - 0.5f, endY   + 0.5f, 0f + 0.5f));
-				vertices.Add(new Vector3(z + startX - 0.5f, endY   + 0.5f, 0f - 0.5f));
-				vertices.Add(new Vector3(z + startX - 0.5f, startY - 0.5f, 0f - 0.5f));
+				vertices.Add(new Vector3(z - 0.5f, startY - 0.5f, endX + 0.5f));
+				vertices.Add(new Vector3(z - 0.5f, endY   + 0.5f, endX + 0.5f));
+				vertices.Add(new Vector3(z - 0.5f, endY   + 0.5f, startX - 0.5f));
+				vertices.Add(new Vector3(z - 0.5f, startY - 0.5f, startX - 0.5f));
+				break;
+			case Direction.east:
+				vertices.Add(new Vector3(z + 0.5f, startY - 0.5f, startX - 0.5f));
+				vertices.Add(new Vector3(z + 0.5f, endY   + 0.5f, startX - 0.5f));
+				vertices.Add(new Vector3(z + 0.5f, endY   + 0.5f, endX + 0.5f));
+				vertices.Add(new Vector3(z + 0.5f, startY - 0.5f, endX + 0.5f));
 				break;
 			case Direction.up:
-				vertices.Add(new Vector3(startX - 0.5f, z + endY + 0.5f, 0f + 0.5f));
-				vertices.Add(new Vector3(endX   + 0.5f, z + endY + 0.5f, 0f + 0.5f));
-				vertices.Add(new Vector3(endX   + 0.5f, z + endY + 0.5f, 0f - 0.5f));
-				vertices.Add(new Vector3(startX - 0.5f, z + endY + 0.5f, 0f - 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, z + 0.5f, endY   + 0.5f));
+				vertices.Add(new Vector3(endX   + 0.5f, z + 0.5f, endY   + 0.5f));
+				vertices.Add(new Vector3(endX   + 0.5f, z + 0.5f, startY - 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, z + 0.5f, startY - 0.5f));
 				break;
 			case Direction.down:
-				vertices.Add(new Vector3(startX - 0.5f, z + startY - 0.5f, 0f - 0.5f));
-				vertices.Add(new Vector3(endX   + 0.5f, z + startY - 0.5f, 0f - 0.5f));
-				vertices.Add(new Vector3(endX   + 0.5f, z + startY - 0.5f, 0f + 0.5f));
-				vertices.Add(new Vector3(startX - 0.5f, z + startY - 0.5f, 0f + 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, z - 0.5f, startY - 0.5f));
+				vertices.Add(new Vector3(endX   + 0.5f, z - 0.5f, startY - 0.5f));
+				vertices.Add(new Vector3(endX   + 0.5f, z - 0.5f, endY   + 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, z - 0.5f, endY   + 0.5f));
 				break;
 			default:
 				throw new System.Exception("Bad direction");

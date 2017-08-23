@@ -54,15 +54,15 @@ namespace Warfest {
 
 			meshRenderer.sharedMaterial.mainTexture = colorTexture.Texture;
 
-			MeshData meshData = voxelMeshBuilder.BuildMesh(chunk);
-			voxelMeshBuilder.RenderMesh(meshData, meshFilter, meshCollider);
+//			MeshData meshData = voxelMeshBuilder.BuildMesh(chunk);
+//			voxelMeshBuilder.RenderMesh(meshData, meshFilter, meshCollider);
 
-//			MeshData meshData = chunkSimplifier.BuildMesh(chunk);
-//			chunkSimplifier.RenderMesh(meshData, meshFilter, meshCollider);
+			MeshData meshData = chunkSimplifier.BuildMesh(chunk);
+			chunkSimplifier.RenderMesh(meshData, meshFilter, meshCollider);
 		}
 
 		QBTFile LoadQubicleFile() {
-			string qbtPath = GameConfig.Instance.GetModelsPath() + "/Test2.qbt";
+			string qbtPath = GameConfig.Instance.GetModelsPath() + "/Test-90.qbt";
 
 			Debug.Log("Path: " + qbtPath);
 
