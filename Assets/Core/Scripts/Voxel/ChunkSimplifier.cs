@@ -71,6 +71,10 @@ namespace Warfest {
 //			BuildFace(meshData, chunk, Direction.down, 0);
 
 			foreach (var dir in DirectionUtils.Directions) {
+//				if (dir == Direction.west) {
+//					continue;
+//				}
+
 				int nbLayers = chunk.SizeZBasedOnPlan(dir);
 
 				for (int i = 0; i < nbLayers; i++) {
@@ -281,14 +285,14 @@ namespace Warfest {
 				CreateVertexFace(meshData, regularPlanRect, dir);
 				AddQuadTriangles(meshData);
 
-//				Vector2 colorUv = colorTexture.GetColorUV(
-//					chunk.GetVoxel((int)rect.x, (int)rect.y, 0).color
-//				);
-//
-//				meshData.uv.Add(colorUv);
-//				meshData.uv.Add(colorUv);
-//				meshData.uv.Add(colorUv);
-//				meshData.uv.Add(colorUv);
+				Vector2 colorUv = colorTexture.GetColorUV(
+					chunk.GetVoxelBasedOnPlan((int)rect.x, (int)rect.y, (int)rect.z, dir).color
+				);
+
+				meshData.uv.Add(colorUv);
+				meshData.uv.Add(colorUv);
+				meshData.uv.Add(colorUv);
+				meshData.uv.Add(colorUv);
 			}
 		}
 

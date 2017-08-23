@@ -62,7 +62,7 @@ namespace Warfest {
 		}
 
 		QBTFile LoadQubicleFile() {
-			string qbtPath = GameConfig.Instance.GetModelsPath() + "/Test.qbt";
+			string qbtPath = GameConfig.Instance.GetModelsPath() + "/Deer.qbt";
 
 			Debug.Log("Path: " + qbtPath);
 
