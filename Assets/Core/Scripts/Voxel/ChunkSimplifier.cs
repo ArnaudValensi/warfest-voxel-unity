@@ -71,21 +71,17 @@ namespace Warfest {
 //			BuildFace(meshData, chunk, Direction.down, 0);
 
 			foreach (var dir in DirectionUtils.Directions) {
-//				if (dir == Direction.west) {
-//					continue;
-//				}
-
 				int nbLayers = chunk.SizeZBasedOnPlan(dir);
 
-				for (int i = 0; i < nbLayers; i++) {
-					BuildFace(meshData, chunk, dir, i);
+				for (int layer = 0; layer < nbLayers; layer++) {
+					BuildFace(meshData, chunk, dir, layer);
 				}
 			}
 
 			return meshData;
 		}
 
-		void BuildFace(MeshData meshData, Chunk chunk, Direction dir, int z) {
+		void BuildFace(MeshData meshData, Chunk chunk, Direction dir, int layer) {
 			HashSet<Vector2> usedPos = new HashSet<Vector2>();
 			List<VoxelRect> rectangles = new List<VoxelRect>();
 
@@ -93,28 +89,28 @@ namespace Warfest {
 			int compatibleLines = 0;
 			Vector2 pos = new Vector2(0f, 0f);
 
-			pos = GetNextPos(usedPos, pos, z, chunk, dir);
+			pos = GetNextPos(usedPos, pos, layer, chunk, dir);
 			while (pos != endPos) {
-				Voxel currentVoxel = chunk.GetVoxelBasedOnPlan((int)pos.x, (int)pos.y, z, dir);
+				Voxel currentVoxel = chunk.GetVoxelBasedOnPlan((int)pos.x, (int)pos.y, layer, dir);
 
-				lineSize = GetSimilarVoxelCountNextToThisPos(pos, z, currentVoxel.color, chunk, usedPos, dir);
+				lineSize = GetSimilarVoxelCountNextToThisPos(pos, layer, currentVoxel.color, chunk, usedPos, dir);
 
-				compatibleLines = GetCompatibleLines(pos, z, currentVoxel.color, chunk, lineSize, usedPos, dir);
+				compatibleLines = GetCompatibleLines(pos, layer, currentVoxel.color, chunk, lineSize, usedPos, dir);
 
-				VoxelRect rect = new VoxelRect(pos.x, pos.y, z, lineSize, compatibleLines);
+				VoxelRect rect = new VoxelRect(pos.x, pos.y, layer, lineSize, compatibleLines);
 				rectangles.Add(rect);
 
 				SetUsedPos(usedPos, rect);
 
 				Debug.LogFormat("pos: {0}, lineSize: {1}, compatibleLines: {2}", pos, lineSize, compatibleLines);
 
-				pos = GetNextPos(usedPos, pos, z, chunk, dir);
+				pos = GetNextPos(usedPos, pos, layer, chunk, dir);
 			}
 
 			BuildRectangleMeshed(rectangles, meshData, chunk, dir);
 		}
 
-		Vector2 GetNextPos(HashSet<Vector2> usedPos, Vector2 pos, int z, Chunk chunk, Direction dir) {
+		Vector2 GetNextPos(HashSet<Vector2> usedPos, Vector2 pos, int layer, Chunk chunk, Direction dir) {
 			int x = (int)pos.x;
 
 			bool isAlreadyUsed;
@@ -129,8 +125,8 @@ namespace Warfest {
 					Vector2 currentPos = new Vector2(x, y);
 
 					isAlreadyUsed = usedPos.Contains(currentPos);
-					isSolidVoxel = chunk.GetVoxelBasedOnPlan(x, y, z, dir).IsSolid;
-					isFaceVisible = IsFaceVisible(x, y, z, chunk, dir);
+					isSolidVoxel = chunk.GetVoxelBasedOnPlan(x, y, layer, dir).IsSolid;
+					isFaceVisible = IsFaceVisible(x, y, layer, chunk, dir);
 
 					if (!isAlreadyUsed && isSolidVoxel && isFaceVisible) {
 						return currentPos;
@@ -143,15 +139,15 @@ namespace Warfest {
 			return endPos;
 		}
 
-		bool IsFaceVisible(int x, int y, int z, Chunk chunk, Direction dir) {
-			if (z == 0) {
+		bool IsFaceVisible(int x, int y, int layer, Chunk chunk, Direction dir) {
+			if (layer == 0) {
 				return true;
 			}
 
-			return chunk.GetVoxelBasedOnPlan(x, y, z - 1, dir).IsAir;
+			return chunk.GetVoxelBasedOnPlan(x, y, layer - 1, dir).IsAir;
 		}
 
-		int GetSimilarVoxelCountNextToThisPos(Vector2 pos, int z, Color32 color, Chunk chunk, HashSet<Vector2> usedPos, Direction dir) {
+		int GetSimilarVoxelCountNextToThisPos(Vector2 pos, int layer, Color32 color, Chunk chunk, HashSet<Vector2> usedPos, Direction dir) {
 			int count = 1;
 			int chunkSizeX = chunk.SizeXBasedOnPlan(dir);
 
@@ -161,8 +157,8 @@ namespace Warfest {
 
 			for (int x = (int)pos.x + 1; x < chunkSizeX; x++) {
 				isAlreadyUsed = usedPos.Contains(new Vector2(x, pos.y));
-				isSameColor = chunk.GetVoxelBasedOnPlan(x, (int)pos.y, z, dir).color.Equals(color);
-				isFaceVisible = IsFaceVisible(x, (int)pos.y, z, chunk, dir);
+				isSameColor = chunk.GetVoxelBasedOnPlan(x, (int)pos.y, layer, dir).color.Equals(color);
+				isFaceVisible = IsFaceVisible(x, (int)pos.y, layer, chunk, dir);
 
 				if (isAlreadyUsed || !isSameColor || !isFaceVisible) {
 					return count;
@@ -174,7 +170,7 @@ namespace Warfest {
 			return count;
 		}
 
-		bool IsLineCompatible(Vector2 pos, int z, int lineSize, Color32 color, Chunk chunk, HashSet<Vector2> usedPos, Direction dir) {
+		bool IsLineCompatible(Vector2 pos, int layer, int lineSize, Color32 color, Chunk chunk, HashSet<Vector2> usedPos, Direction dir) {
 			int count = 0;
 			int chunkSizeX = chunk.SizeXBasedOnPlan(dir);
 
@@ -184,8 +180,8 @@ namespace Warfest {
 
 			for (int x = (int)pos.x; x < chunkSizeX && count < lineSize; x++) {
 				isAlreadyUsed = usedPos.Contains(new Vector2(x, pos.y));
-				isSameColor = chunk.GetVoxelBasedOnPlan(x, (int)pos.y, z, dir).color.Equals(color);
-				isFaceVisible = IsFaceVisible(x, (int)pos.y, z, chunk, dir);
+				isSameColor = chunk.GetVoxelBasedOnPlan(x, (int)pos.y, layer, dir).color.Equals(color);
+				isFaceVisible = IsFaceVisible(x, (int)pos.y, layer, chunk, dir);
 
 				if (!isAlreadyUsed && isSameColor && isFaceVisible) {
 					count++;
@@ -197,13 +193,13 @@ namespace Warfest {
 			return count == lineSize;
 		}
 
-		int GetCompatibleLines(Vector2 pos, int z, Color32 color, Chunk chunk, int lineSize, HashSet<Vector2> usedPos, Direction dir) {
+		int GetCompatibleLines(Vector2 pos, int layer, Color32 color, Chunk chunk, int lineSize, HashSet<Vector2> usedPos, Direction dir) {
 			int count = 1;
 
 			int chunkSizeY = chunk.SizeYBasedOnPlan(dir);
 
 			for (int y = (int)pos.y + 1; y < chunkSizeY; y++) {
-				if (!IsLineCompatible(new Vector2(pos.x, y), z, lineSize, color, chunk, usedPos, dir)) {
+				if (!IsLineCompatible(new Vector2(pos.x, y), layer, lineSize, color, chunk, usedPos, dir)) {
 					return count;
 				}
 
@@ -237,7 +233,7 @@ namespace Warfest {
 				return new VoxelRect(
 					chunkSizeX - rect.x - rect.width,
 					rect.y,
-					chunkSizeZ - rect.z - 1,
+					chunkSizeZ - rect.layer - 1,
 					rect.width,
 					rect.height
 				);
@@ -245,7 +241,7 @@ namespace Warfest {
 				return new VoxelRect(
 					chunkSizeX - rect.x - rect.width,
 					rect.y,
-					rect.z,
+					rect.layer,
 					rect.width,
 					rect.height
 				);
@@ -253,7 +249,7 @@ namespace Warfest {
 				return new VoxelRect(
 					rect.x,
 					rect.y,
-					chunkSizeZ - rect.z - 1,
+					chunkSizeZ - rect.layer - 1,
 					rect.width,
 					rect.height
 				);
@@ -261,7 +257,7 @@ namespace Warfest {
 				return new VoxelRect(
 					rect.x,
 					rect.y,
-					chunkSizeZ - rect.z - 1,
+					chunkSizeZ - rect.layer - 1,
 					rect.width,
 					rect.height
 				);
@@ -269,7 +265,7 @@ namespace Warfest {
 				return new VoxelRect(
 					rect.x,
 					chunkSizeY - rect.y - rect.height,
-					rect.z,
+					rect.layer,
 					rect.width,
 					rect.height
 				);
@@ -286,7 +282,7 @@ namespace Warfest {
 				AddQuadTriangles(meshData);
 
 				Vector2 colorUv = colorTexture.GetColorUV(
-					chunk.GetVoxelBasedOnPlan((int)rect.x, (int)rect.y, (int)rect.z, dir).color
+					chunk.GetVoxelBasedOnPlan((int)rect.x, (int)rect.y, (int)rect.layer, dir).color
 				);
 
 				meshData.uv.Add(colorUv);
@@ -302,44 +298,44 @@ namespace Warfest {
 			float startY = rect.y;
 			float endX = rect.x + rect.width - 1;
 			float endY = rect.y + rect.height - 1;
-			float z = rect.z;
+			float layer = rect.layer;
 
 			switch (dir) {
 			case Direction.north:
-				vertices.Add(new Vector3(endX   + 0.5f, startY - 0.5f, z + 0.5f));
-				vertices.Add(new Vector3(endX   + 0.5f, endY   + 0.5f, z + 0.5f));
-				vertices.Add(new Vector3(startX - 0.5f, endY   + 0.5f, z + 0.5f));
-				vertices.Add(new Vector3(startX - 0.5f, startY - 0.5f, z + 0.5f));
+				vertices.Add(new Vector3(endX   + 0.5f, startY - 0.5f, layer + 0.5f));
+				vertices.Add(new Vector3(endX   + 0.5f, endY   + 0.5f, layer + 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, endY   + 0.5f, layer + 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, startY - 0.5f, layer + 0.5f));
 				break;
 			case Direction.south:
-				vertices.Add(new Vector3(startX - 0.5f, startY - 0.5f, z - 0.5f));
-				vertices.Add(new Vector3(startX - 0.5f, endY   + 0.5f, z - 0.5f));
-				vertices.Add(new Vector3(endX   + 0.5f, endY   + 0.5f, z - 0.5f));
-				vertices.Add(new Vector3(endX   + 0.5f, startY - 0.5f, z - 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, startY - 0.5f, layer - 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, endY   + 0.5f, layer - 0.5f));
+				vertices.Add(new Vector3(endX   + 0.5f, endY   + 0.5f, layer - 0.5f));
+				vertices.Add(new Vector3(endX   + 0.5f, startY - 0.5f, layer - 0.5f));
 				break;
 			case Direction.west:
-				vertices.Add(new Vector3(z - 0.5f, startY - 0.5f, endX + 0.5f));
-				vertices.Add(new Vector3(z - 0.5f, endY   + 0.5f, endX + 0.5f));
-				vertices.Add(new Vector3(z - 0.5f, endY   + 0.5f, startX - 0.5f));
-				vertices.Add(new Vector3(z - 0.5f, startY - 0.5f, startX - 0.5f));
+				vertices.Add(new Vector3(layer - 0.5f, startY - 0.5f, endX + 0.5f));
+				vertices.Add(new Vector3(layer - 0.5f, endY   + 0.5f, endX + 0.5f));
+				vertices.Add(new Vector3(layer - 0.5f, endY   + 0.5f, startX - 0.5f));
+				vertices.Add(new Vector3(layer - 0.5f, startY - 0.5f, startX - 0.5f));
 				break;
 			case Direction.east:
-				vertices.Add(new Vector3(z + 0.5f, startY - 0.5f, startX - 0.5f));
-				vertices.Add(new Vector3(z + 0.5f, endY   + 0.5f, startX - 0.5f));
-				vertices.Add(new Vector3(z + 0.5f, endY   + 0.5f, endX + 0.5f));
-				vertices.Add(new Vector3(z + 0.5f, startY - 0.5f, endX + 0.5f));
+				vertices.Add(new Vector3(layer + 0.5f, startY - 0.5f, startX - 0.5f));
+				vertices.Add(new Vector3(layer + 0.5f, endY   + 0.5f, startX - 0.5f));
+				vertices.Add(new Vector3(layer + 0.5f, endY   + 0.5f, endX + 0.5f));
+				vertices.Add(new Vector3(layer + 0.5f, startY - 0.5f, endX + 0.5f));
 				break;
 			case Direction.up:
-				vertices.Add(new Vector3(startX - 0.5f, z + 0.5f, endY   + 0.5f));
-				vertices.Add(new Vector3(endX   + 0.5f, z + 0.5f, endY   + 0.5f));
-				vertices.Add(new Vector3(endX   + 0.5f, z + 0.5f, startY - 0.5f));
-				vertices.Add(new Vector3(startX - 0.5f, z + 0.5f, startY - 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, layer + 0.5f, endY   + 0.5f));
+				vertices.Add(new Vector3(endX   + 0.5f, layer + 0.5f, endY   + 0.5f));
+				vertices.Add(new Vector3(endX   + 0.5f, layer + 0.5f, startY - 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, layer + 0.5f, startY - 0.5f));
 				break;
 			case Direction.down:
-				vertices.Add(new Vector3(startX - 0.5f, z - 0.5f, startY - 0.5f));
-				vertices.Add(new Vector3(endX   + 0.5f, z - 0.5f, startY - 0.5f));
-				vertices.Add(new Vector3(endX   + 0.5f, z - 0.5f, endY   + 0.5f));
-				vertices.Add(new Vector3(startX - 0.5f, z - 0.5f, endY   + 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, layer - 0.5f, startY - 0.5f));
+				vertices.Add(new Vector3(endX   + 0.5f, layer - 0.5f, startY - 0.5f));
+				vertices.Add(new Vector3(endX   + 0.5f, layer - 0.5f, endY   + 0.5f));
+				vertices.Add(new Vector3(startX - 0.5f, layer - 0.5f, endY   + 0.5f));
 				break;
 			default:
 				throw new System.Exception("Bad direction");
@@ -383,14 +379,14 @@ namespace Warfest {
 		public class VoxelRect {
 			public float x;
 			public float y;
-			public float z;
+			public float layer;
 			public float width;
 			public float height;
 
-			public VoxelRect(float x, float y, float z, float width, float height) {
+			public VoxelRect(float x, float y, float layer, float width, float height) {
 				this.x = x;
 				this.y = y;
-				this.z = z;
+				this.layer = layer;
 				this.width = width;
 				this.height = height;
 			}

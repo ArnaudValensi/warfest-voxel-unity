@@ -38,20 +38,20 @@ namespace Warfest {
 			return GetVoxel(pos.x, pos.y, pos.z);
 		}
 
-		public Voxel GetVoxelBasedOnPlan(int x, int y, int z, Direction direction) {
+		public Voxel GetVoxelBasedOnPlan(int x, int y, int layer, Direction direction) {
 			switch (direction) {
 			case Direction.south:
-				return voxels[x, y, z];
+				return voxels[x, y, layer];
 			case Direction.north:
-				return voxels[SizeX - x - 1, y, SizeZ - z - 1];
+				return voxels[SizeX - x - 1, y, SizeZ - layer - 1];
 			case Direction.west:
-				return voxels[z, y, SizeZ - x - 1];
+				return voxels[layer, y, SizeZ - x - 1];
 			case Direction.east:
-				return voxels[SizeX - z - 1, y, x];
+				return voxels[SizeX - layer - 1, y, x];
 			case Direction.up:
-				return voxels[x, SizeY - z - 1, y];
+				return voxels[x, SizeY - layer - 1, y];
 			case Direction.down:
-				return voxels[x, z, SizeZ - y - 1];
+				return voxels[x, layer, SizeZ - y - 1];
 			default:
 				throw new System.Exception("Bad direction");
 			}
