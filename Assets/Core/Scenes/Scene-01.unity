@@ -2002,6 +2002,11 @@ Prefab:
       propertyPath: m_LocalScale.z
       value: 0.125
       objectReference: {fileID: 0}
+    - target: {fileID: 33407486771292058, guid: c490b324875e340948a8245657a1d84a,
+        type: 2}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 4300000, guid: 2a009aa71738a476aad2bbb7e59d454c, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c490b324875e340948a8245657a1d84a, type: 2}
   m_IsPrefabParent: 0
@@ -6364,7 +6369,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2a6eba1a414848cdabd00a6b1c53873, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: 4
+  size: 8
 --- !u!1001 &1843769428
 Prefab:
   m_ObjectHideFlags: 0
