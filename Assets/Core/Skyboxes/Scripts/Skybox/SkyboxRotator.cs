@@ -1,17 +1,17 @@
 ﻿using UnityEngine;
 
-public class SkyboxRotator : MonoBehaviour
-{
-    public float RotationPerSecond = 1;
-    private bool _rotate;
+public class SkyboxRotator : MonoBehaviour {
+	public float RotationPerSecond = 1;
+	public bool rotate = true;
 
-    protected void Update()
-    {
-        if (_rotate) RenderSettings.skybox.SetFloat("_Rotation", Time.time * RotationPerSecond);
-    }
+	void Update() {
+		if (rotate) {
+			RenderSettings.skybox.SetFloat("_Rotation", Time.time * RotationPerSecond);
+		}
+	}
 
-    public void ToggleSkyboxRotation()
-    {
-        _rotate = !_rotate;
-    }
+	void OnApplicationQuit() {
+		RenderSettings.skybox.SetFloat("_Rotation", 0);
+	}
+
 }
