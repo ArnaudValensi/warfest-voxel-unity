@@ -318,6 +318,18 @@ namespace Warfest {
 			return filter.sharedMesh;
 		}
 
+		public Mesh CreateMesh(MeshData meshData) {
+			Mesh mesh = new Mesh();
+
+			mesh.vertices = meshData.vertices.ToArray();
+			mesh.triangles = meshData.triangles.ToArray();
+
+			mesh.uv = meshData.uv.ToArray();
+			mesh.RecalculateNormals();
+
+			return mesh;
+		}
+
 		public class VoxelRect {
 			public float x;
 			public float y;

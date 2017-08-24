@@ -12,4 +12,8 @@ public class GameConfig : MonoBehaviourSingleton<GameConfig> {
 		return Application.dataPath + "/StreamingAssets/Models";
 	}
 
+	public string GetVoxelModelsPath() {
+		return Application.dataPath + "/Core/Prefabs/VoxelModels";
+	}
+
 }

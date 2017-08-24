@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 
 namespace Warfest {
-	[ExecuteInEditMode]
 	[RequireComponent(typeof(MeshFilter))]
 	[RequireComponent(typeof(MeshRenderer))]
 	[RequireComponent(typeof(MeshCollider))]
@@ -41,12 +40,6 @@ namespace Warfest {
 		void OnApplicationQuit() {
 			Debug.Log("[VoxelModel] OnApplicationQuit");
 		}
-
-//		void OnValidate() {
-//			Debug.Log("[VoxelModel] OnValidate");
-//
-//			LoadModel();
-//		}
 
 		void LoadModel() {
 			Debug.Log("[VoxelModel] LoadModel");

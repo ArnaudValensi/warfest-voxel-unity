@@ -18,9 +18,16 @@ namespace Warfest {
 
 		void Awake() {
 			Debug.Log("[ColorTexture] Awake");
+		}
 
+		void OnEnable() {
+			Debug.Log("[ColorTexture] OnEnable");
+		}
+
+		public void Init() {
 			texture = new Texture2D(size, size);
 			colorToUv = new Dictionary<Color32, Vector2>();
+			colorIndex = 0;
 
 			texture.filterMode = FilterMode.Point;
 			texture.Apply();
