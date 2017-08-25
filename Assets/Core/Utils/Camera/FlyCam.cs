@@ -21,10 +21,6 @@ public class FlyCam : MonoBehaviour {
 
 	static float rotationY = 0F;
 
-	void Start() {
-		SetCursorLock(true);
-	}
-
 	void Update() {
 		KeyInput();
 
@@ -54,14 +50,6 @@ public class FlyCam : MonoBehaviour {
 		if (Input.GetKey(KeyCode.LeftShift))
 			movementVector -= Camera.main.transform.up * verticalSpeed;
 
-		if (Input.GetKeyDown(KeyCode.Escape)) {
-			SetCursorLock(false);
-		}
-
-		if (Input.GetMouseButtonDown(0)) {
-			SetCursorLock(true);
-		}
-
 		Camera.main.transform.position = Camera.main.transform.position + movementVector * Time.deltaTime;
 	}
 
@@ -83,8 +71,4 @@ public class FlyCam : MonoBehaviour {
 		}
 	}
 
-	void SetCursorLock(bool locked) {
-		Cursor.lockState = (locked) ? CursorLockMode.Locked : CursorLockMode.None;
-		Cursor.visible = CursorLockMode.Locked != Cursor.lockState;
-	}
 }

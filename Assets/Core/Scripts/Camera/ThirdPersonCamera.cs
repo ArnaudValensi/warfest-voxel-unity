@@ -45,7 +45,9 @@ namespace Warfest {
 		}
 
 		void Update() {
-			HandleRotationMovement();
+			if (Cursor.lockState == CursorLockMode.Locked) {
+				HandleRotationMovement();
+			}
 		}
 
 		void LateUpdate() {
