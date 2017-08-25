@@ -7,13 +7,11 @@ namespace Warfest {
 		public Transform cameraTransform;
 
 		Animator animator;
-		int speedHash;
 		int animSpeedX;
 		int animSpeedY;
 
 		void Start() {
 			animator = GetComponent<Animator>();
-			speedHash = Animator.StringToHash("Speed");
 			animSpeedX = Animator.StringToHash("SpeedX");
 			animSpeedY = Animator.StringToHash("SpeedY");
 		}
