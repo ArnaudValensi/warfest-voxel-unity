@@ -853,8 +853,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb5d07cce14be4d319b10bd98a60c9dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 10
-  turningSpeed: 60
+  movementSpeed: 0.3
+  cameraTransform: {fileID: 0}
 --- !u!137 &137714307923479432
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

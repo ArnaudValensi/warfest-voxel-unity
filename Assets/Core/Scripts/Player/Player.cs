@@ -2,8 +2,9 @@
 
 namespace Warfest {
 	public class Player : MonoBehaviour {
-		public float movementSpeed = 10;
-		public float turningSpeed = 60;
+		public float movementSpeed = 0.2f;
+		public float rotationSpeed = 1f;
+		public Transform cameraTransform;
 
 		Animator animator;
 		int speedHash;
@@ -14,17 +15,24 @@ namespace Warfest {
 		}
 
 		void Update() {
-			Vector2 movement = new Vector2(
-				Input.GetAxis("Horizontal"),
-				Input.GetAxis("Vertical")
-			);
-			float horizontal = movement.x * turningSpeed * Time.deltaTime;
-			transform.Rotate(0, horizontal, 0);
+			float x = Input.GetAxis("Horizontal");
+			float y = Input.GetAxis("Vertical");
+			Vector3 movement = new Vector3(x * movementSpeed, 0f, y * movementSpeed);
 
-			float vertical = movement.y * movementSpeed * Time.deltaTime;
-			transform.Translate(0, 0, vertical);
+			// Convert input movement to camera space
+			var moveInCameraSpace = cameraTransform.TransformDirection(movement);
 
-			animator.SetFloat(speedHash, movement.y);
+			transform.position = transform.position + moveInCameraSpace;
+			transform.rotation = cameraTransform.rotation;
+
+//			transform.rotation = Quaternion.Slerp(transform.rotation, cameraTransform.rotation, Time.deltaTime * rotationSpeed);
+//			transform.rotation = Quaternion.RotateTowards(
+//				transform.rotation,
+//				cameraTransform.rotation,
+//				rotationSpeed * Time.deltaTime
+//			);
+
+			 animator.SetFloat(speedHash, y);
 		}
 	}
 }
