@@ -3520,7 +3520,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   distanceAway: 7.81
   followTransform: {fileID: 1689682845}
-  turnSpeed: 1.5
+  turnSpeed: 7
   tiltMax: 75
   tiltMin: 45
 --- !u!114 &927495526
@@ -3531,7 +3531,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 927495523}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94b04ec3bda6b7747aa53936ef3b0ae2, type: 3}
+  m_Script: {fileID: 11500000, guid: 1dfe92fc6f44b49dc957ed56ecfa4eaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   clipMoveTime: 0.05
