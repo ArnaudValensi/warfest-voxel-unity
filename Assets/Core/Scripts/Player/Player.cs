@@ -8,10 +8,14 @@ namespace Warfest {
 
 		Animator animator;
 		int speedHash;
+		int animSpeedX;
+		int animSpeedY;
 
 		void Start() {
 			animator = GetComponent<Animator>();
 			speedHash = Animator.StringToHash("Speed");
+			animSpeedX = Animator.StringToHash("SpeedX");
+			animSpeedY = Animator.StringToHash("SpeedY");
 		}
 
 		void Update() {
@@ -32,7 +36,8 @@ namespace Warfest {
 //				rotationSpeed * Time.deltaTime
 //			);
 
-			 animator.SetFloat(speedHash, y);
+			animator.SetFloat(animSpeedX, x);
+			animator.SetFloat(animSpeedY, y);
 		}
 	}
 }
