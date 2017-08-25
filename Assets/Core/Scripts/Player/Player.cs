@@ -9,6 +9,7 @@ namespace Warfest {
 		Animator animator;
 		int animSpeedX;
 		int animSpeedY;
+		int animIsJumping;
 
 		CharacterController controller;
 
@@ -24,6 +25,7 @@ namespace Warfest {
 			animator = GetComponent<Animator>();
 			animSpeedX = Animator.StringToHash("SpeedX");
 			animSpeedY = Animator.StringToHash("SpeedY");
+			animIsJumping = Animator.StringToHash("IsJumping");
 
 			controller = GetComponent<CharacterController>();
 		}
@@ -48,6 +50,8 @@ namespace Warfest {
 			// Jump
 			if (controller.isGrounded) {
 				grounded = true;
+				animator.SetBool(animIsJumping, !grounded);
+
 				jumpVelocity.y = -gravity * Time.deltaTime;
 
 				if (Input.GetButtonDown("Jump")) {
@@ -55,6 +59,7 @@ namespace Warfest {
 				}
 			} else {
 				grounded = false;
+				animator.SetBool(animIsJumping, !grounded);
 
 				// If it is falling
 				if (jumpVelocity.y < 0) {
