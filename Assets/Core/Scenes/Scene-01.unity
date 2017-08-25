@@ -3574,6 +3574,7 @@ GameObject:
   m_Component:
   - component: {fileID: 927495524}
   - component: {fileID: 927495525}
+  - component: {fileID: 927495526}
   m_Layer: 0
   m_Name: ThirdPersonCamera
   m_TagString: Untagged
@@ -3608,10 +3609,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   distanceAway: 7.81
   followTransform: {fileID: 1689682845}
-  m_TurnSpeed: 7
-  followSpeed: 1
-  m_TiltMax: 75
-  m_TiltMin: 45
+  turnSpeed: 1.5
+  tiltMax: 75
+  tiltMin: 45
+--- !u!114 &927495526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 927495523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94b04ec3bda6b7747aa53936ef3b0ae2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clipMoveTime: 0.05
+  returnTime: 0.05
+  sphereCastRadius: 0.1
+  visualiseInEditor: 1
+  closestDistance: 0.5
+  dontClipTag: Player
 --- !u!1001 &942051251
 Prefab:
   m_ObjectHideFlags: 0
