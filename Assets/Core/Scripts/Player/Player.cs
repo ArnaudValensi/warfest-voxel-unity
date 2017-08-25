@@ -18,7 +18,7 @@ namespace Warfest {
 		public float jumpForce = 14f;
 
 		bool grounded = false;
-		Vector3 velocity = Vector3.zero;
+		Vector3 jumpVelocity = Vector3.zero;
 
 		void Start() {
 			animator = GetComponent<Animator>();
@@ -43,33 +43,32 @@ namespace Warfest {
 			// Convert input movement to camera space
 			var moveInCameraSpace = cameraTransform.TransformDirection(movement);
 
-//			controller.Move(moveInCameraSpace);
-//			transform.position = transform.position + moveInCameraSpace;
 			transform.rotation = cameraTransform.rotation;
-
-			animator.SetFloat(animSpeedX, x);
-			animator.SetFloat(animSpeedY, y);
 
 			// Jump
 			if (controller.isGrounded) {
 				grounded = true;
-				velocity.y = -gravity * Time.deltaTime;
+				jumpVelocity.y = -gravity * Time.deltaTime;
 
 				if (Input.GetButtonDown("Jump")) {
-					velocity.y = jumpForce;
+					jumpVelocity.y = jumpForce;
 				}
 			} else {
 				grounded = false;
 
 				// If it is falling
-				if (velocity.y < 0) {
-					velocity.y -= gravity * Time.deltaTime * fallCoef;
+				if (jumpVelocity.y < 0) {
+					jumpVelocity.y -= gravity * Time.deltaTime * fallCoef;
 				} else {
-					velocity.y -= gravity * Time.deltaTime;
+					jumpVelocity.y -= gravity * Time.deltaTime;
 				}
 			}
 
-			controller.Move(velocity + moveInCameraSpace);
+			controller.Move(jumpVelocity + moveInCameraSpace);
+
+			// Anims
+			animator.SetFloat(animSpeedX, x);
+			animator.SetFloat(animSpeedY, y);
 		}
 	}
 }
