@@ -10,32 +10,66 @@ namespace Warfest {
 		int animSpeedX;
 		int animSpeedY;
 
+		CharacterController controller;
+
+		// Jump
+		public float gravity = 30f;
+		public float fallCoef = 2f;
+		public float jumpForce = 14f;
+
+		bool grounded = false;
+		Vector3 velocity = Vector3.zero;
+
 		void Start() {
 			animator = GetComponent<Animator>();
 			animSpeedX = Animator.StringToHash("SpeedX");
 			animSpeedY = Animator.StringToHash("SpeedY");
+
+			controller = GetComponent<CharacterController>();
 		}
 
 		void Update() {
 			float x = Input.GetAxis("Horizontal");
 			float y = Input.GetAxis("Vertical");
-			Vector3 movement = new Vector3(x * movementSpeed, 0f, y * movementSpeed);
+			bool jump = Input.GetButtonDown("Jump");
+
+			// Movement
+			Vector3 movement = new Vector3(
+				x * movementSpeed * Time.deltaTime,
+				0f,
+				y * movementSpeed * Time.deltaTime
+			);
 
 			// Convert input movement to camera space
 			var moveInCameraSpace = cameraTransform.TransformDirection(movement);
 
-			transform.position = transform.position + moveInCameraSpace;
+//			controller.Move(moveInCameraSpace);
+//			transform.position = transform.position + moveInCameraSpace;
 			transform.rotation = cameraTransform.rotation;
-
-//			transform.rotation = Quaternion.Slerp(transform.rotation, cameraTransform.rotation, Time.deltaTime * rotationSpeed);
-//			transform.rotation = Quaternion.RotateTowards(
-//				transform.rotation,
-//				cameraTransform.rotation,
-//				rotationSpeed * Time.deltaTime
-//			);
 
 			animator.SetFloat(animSpeedX, x);
 			animator.SetFloat(animSpeedY, y);
+
+			// Jump
+			if (controller.isGrounded) {
+				grounded = true;
+				velocity.y = -gravity * Time.deltaTime;
+
+				if (Input.GetButtonDown("Jump")) {
+					velocity.y = jumpForce;
+				}
+			} else {
+				grounded = false;
+
+				// If it is falling
+				if (velocity.y < 0) {
+					velocity.y -= gravity * Time.deltaTime * fallCoef;
+				} else {
+					velocity.y -= gravity * Time.deltaTime;
+				}
+			}
+
+			controller.Move(velocity + moveInCameraSpace);
 		}
 	}
 }
