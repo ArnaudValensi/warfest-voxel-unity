@@ -9,6 +9,12 @@ namespace Warfest {
 		[SerializeField]
 		float force = 1000f;
 
+		[SerializeField]
+		GameObject mesh;
+
+		[SerializeField]
+		GameObject particle;
+
 		Rigidbody rbody;
 
 		void Start() {
@@ -16,6 +22,13 @@ namespace Warfest {
 
 			rbody.AddRelativeForce(0, 0, force);
 			Destroy(gameObject, timeToDestroy);
+		}
+
+		void OnCollisionEnter(Collision collision) {
+			particle.SetActive(true);
+			mesh.SetActive(false);
+
+			Destroy(gameObject, 2f);
 		}
 
 	}

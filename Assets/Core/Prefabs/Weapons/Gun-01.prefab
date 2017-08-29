@@ -121,5 +121,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca384beee2fd8483cb76123ec23f38c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 1907592339059544, guid: 3d551ff5a558d40fe807d1f7d7bfe434,
+  bulletPrefab: {fileID: 1515559701728358, guid: 3d551ff5a558d40fe807d1f7d7bfe434,
     type: 2}
