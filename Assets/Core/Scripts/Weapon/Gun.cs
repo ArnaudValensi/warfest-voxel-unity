@@ -14,9 +14,8 @@ namespace Warfest {
 			bulletsHolder = GameObject.Find("/Managers/BulletPool").transform;
 		}
 
+		// TODO: add pooling
 		public void Shoot() {
-			Debug.Log("[Gun] Shoot");
-
 			Instantiate(bulletPrefab, spawnPosition.position, spawnPosition.rotation, bulletsHolder);
 		}
 
