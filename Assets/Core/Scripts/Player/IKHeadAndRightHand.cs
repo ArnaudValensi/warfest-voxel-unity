@@ -2,7 +2,7 @@
 
 namespace Warfest {
 	[RequireComponent(typeof(Animator))]
-	public class IKRightHand : MonoBehaviour {
+	public class IKHeadAndRightHand : MonoBehaviour {
 
 		Animator animator;
 

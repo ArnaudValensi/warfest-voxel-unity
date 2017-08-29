@@ -33,7 +33,6 @@ namespace Warfest {
 		void Update() {
 			float x = Input.GetAxis("Horizontal");
 			float y = Input.GetAxis("Vertical");
-			bool jump = Input.GetButtonDown("Jump");
 
 			// Movement
 			Vector3 movement = new Vector3(

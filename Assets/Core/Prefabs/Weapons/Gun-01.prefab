@@ -11,6 +11,21 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1956349654419560}
   m_IsPrefabParent: 1
+--- !u!1 &1833076609500436
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4351323809185180}
+  m_Layer: 0
+  m_Name: BulletSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1956349654419560
 GameObject:
   m_ObjectHideFlags: 0
@@ -21,6 +36,7 @@ GameObject:
   - component: {fileID: 4095927624947704}
   - component: {fileID: 23571632047028284}
   - component: {fileID: 33646147150597174}
+  - component: {fileID: 114190223877691464}
   m_Layer: 0
   m_Name: Gun-01
   m_TagString: Untagged
@@ -34,11 +50,25 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1956349654419560}
-  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -13.64, y: 0.0625, z: 4.32}
-  m_LocalScale: {x: 0.06250003, y: 0.0625, z: 0.06250003}
-  m_Children: []
+  m_LocalRotation: {x: 0.7071068, y: -0.7071068, z: 0, w: 0}
+  m_LocalPosition: {x: 0.0132, y: 0.158, z: 0.0225}
+  m_LocalScale: {x: 0.015625035, y: 0.015625006, z: 0.01562504}
+  m_Children:
+  - {fileID: 4351323809185180}
   m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 180, y: 0, z: 90}
+--- !u!4 &4351323809185180
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1833076609500436}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -0.48, y: 6.5, z: 1.47}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4095927624947704}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!23 &23571632047028284
@@ -80,3 +110,16 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1956349654419560}
   m_Mesh: {fileID: 4300000, guid: bdc4a56b377d44a22ab6ef42df1f563c, type: 2}
+--- !u!114 &114190223877691464
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1956349654419560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca384beee2fd8483cb76123ec23f38c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 1907592339059544, guid: 3d551ff5a558d40fe807d1f7d7bfe434,
+    type: 2}
