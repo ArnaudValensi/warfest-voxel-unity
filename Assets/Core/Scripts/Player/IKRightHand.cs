@@ -21,7 +21,6 @@ namespace Warfest {
 
 		//a callback for calculating IK
 		void OnAnimatorIK(int layerIndex) {
-			Debug.Log("[IKRightHand] OnAnimatorIK");
 			if (animator) {
 
 				//if the IK is active, set the position and rotation directly to the goal.
@@ -29,8 +28,6 @@ namespace Warfest {
 
 					// Set the look target position, if one has been assigned
 					if (lookObj != null) {
-						Debug.Log("look at");
-
 						animator.SetLookAtWeight(1);
 						animator.SetLookAtPosition(lookObj.position);
 					}
