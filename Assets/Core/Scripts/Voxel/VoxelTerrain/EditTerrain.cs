@@ -7,6 +7,7 @@ namespace Warfest {
 		LayerMask hitLayerMask;
 
 		VoxelTerrain voxelTerrain;
+		Color32 defaultColor = new Color32(88, 125, 191, byte.MaxValue);
 
 		void Start() {
 			voxelTerrain = GameObject.Find("VoxelTerrain").GetComponent<VoxelTerrain>();
@@ -14,22 +15,41 @@ namespace Warfest {
 
 		void Update() {
 			if (Input.GetMouseButtonDown(0)) {
-				SetVoxel();
+				AddVoxel(defaultColor);
+			}
+
+			if (Input.GetMouseButtonDown(1)) {
+				RemoveVoxel();
 			}
 		}
 
-		void SetVoxel() {
+		void AddVoxel(Color32 color) {
 			Transform cameraTransform = Camera.main.transform;
 			RaycastHit hit;
 
-			Debug.Log("[EditTerrain] SetVoxel");
+			Debug.Log("[EditTerrain] AddVoxel");
 
 			if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, 100, hitLayerMask)) {
 				Pos pos = GetVoxelPos(hit, true);
 
-				Debug.Log("[EditTerrain] SetVoxel, hit, pos: " + pos);
+				Debug.Log("[EditTerrain] AddVoxel, hit, pos: " + pos);
 
-				voxelTerrain.SetVoxel(pos);
+				voxelTerrain.AddVoxel(pos, color);
+			}
+		}
+
+		void RemoveVoxel() {
+			Transform cameraTransform = Camera.main.transform;
+			RaycastHit hit;
+
+			Debug.Log("[EditTerrain] RemoveVoxel");
+
+			if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, 100, hitLayerMask)) {
+				Pos pos = GetVoxelPos(hit, false);
+
+				Debug.Log("[EditTerrain] RemoveVoxel, hit, pos: " + pos);
+
+				voxelTerrain.RemoveVoxel(pos);
 			}
 		}
 

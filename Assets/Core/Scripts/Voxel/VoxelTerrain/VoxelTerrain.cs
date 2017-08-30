@@ -16,14 +16,13 @@ namespace Warfest {
 		GameObject chunkPrefab;
 
 		int chunkSize = 16;
-		Color32 defaultColor = new Color32(88, 125, 191, byte.MaxValue);
 		Dictionary<Pos, TerrainChunk> terrainChunks;
 
 		void Start() {
 			terrainChunks = new Dictionary<Pos, TerrainChunk>();
 		}
 
-		public void SetVoxel(Pos pos) {
+		public void AddVoxel(Pos pos, Color32 color) {
 			Pos chunkPos = pos.ContainingChunkCoordinates(chunkSize);
 			Pos posInChunk = pos.ToLocalChunkCoordinates(chunkSize);
 			TerrainChunk terrainChunk;
@@ -44,7 +43,21 @@ namespace Warfest {
 				terrainChunks.Add(chunkPos, terrainChunk);
 			}
 
-			terrainChunk.SetVoxel(posInChunk, defaultColor);
+			terrainChunk.SetVoxel(posInChunk, Voxel.Type.Solid, color);
+		}
+
+		// NOTE: could check if all voxels are air and remove it.
+		public void RemoveVoxel(Pos pos) {
+			Pos chunkPos = pos.ContainingChunkCoordinates(chunkSize);
+			Pos posInChunk = pos.ToLocalChunkCoordinates(chunkSize);
+			TerrainChunk terrainChunk;
+
+			Debug.LogFormat("[VoxelTerrain] chunkPos: {0}, posInChunk: {1}", chunkPos, posInChunk);
+
+			if (terrainChunks.TryGetValue(chunkPos, out terrainChunk)) {
+				terrainChunk.SetVoxel(posInChunk, Voxel.Type.Air, Color.black);
+			}
+
 		}
 
 	}
