@@ -300,12 +300,12 @@ namespace Warfest {
 		}
 
 		public Mesh RenderMesh(MeshData meshData, MeshFilter filter, MeshCollider coll) {
-			filter.sharedMesh.Clear();
-			filter.sharedMesh.vertices = meshData.vertices.ToArray();
-			filter.sharedMesh.triangles = meshData.triangles.ToArray();
+			filter.mesh.Clear();
+			filter.mesh.vertices = meshData.vertices.ToArray();
+			filter.mesh.triangles = meshData.triangles.ToArray();
 
-			filter.sharedMesh.uv = meshData.uv.ToArray();
-			filter.sharedMesh.RecalculateNormals();
+			filter.mesh.uv = meshData.uv.ToArray();
+			filter.mesh.RecalculateNormals();
 
 			coll.sharedMesh = null;
 			Mesh collMesh = new Mesh();

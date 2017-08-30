@@ -12,7 +12,7 @@ namespace Warfest {
 		MeshRenderer meshRenderer;
 		ColorTexture colorTexture;
 		VoxelMeshBuilder voxelMeshBuilder;
-		// ChunkSimplifier chunkSimplifier;
+		ChunkSimplifier chunkSimplifier;
 
 		public void Init(int chunkSize) {
 			meshFilter = GetComponent<MeshFilter>();
@@ -20,7 +20,7 @@ namespace Warfest {
 			meshRenderer = GetComponent<MeshRenderer>();
 			colorTexture = GameManager.Instance.GetColorTexture();
 			voxelMeshBuilder = GameManager.Instance.GetVoxelMeshBuilder();
-			// chunkSimplifier = GameObject.Find("/Managers/ChunkSimplifier").GetComponent<ChunkSimplifier>();
+			chunkSimplifier = GameObject.Find("/Managers/ChunkSimplifier").GetComponent<ChunkSimplifier>();
 
 			meshRenderer.sharedMaterial.mainTexture = colorTexture.Texture;
 
@@ -34,11 +34,11 @@ namespace Warfest {
 		}
 
 		void Refresh() {
-			MeshData meshData = voxelMeshBuilder.BuildMesh(chunk);
-			voxelMeshBuilder.RenderMesh(meshData, meshFilter, meshCollider);
+//			MeshData meshData = voxelMeshBuilder.BuildMesh(chunk);
+//			voxelMeshBuilder.RenderMesh(meshData, meshFilter, meshCollider);
 
-			// MeshData meshData = chunkSimplifier.BuildMesh(chunk);
-			// chunkSimplifier.RenderMesh(meshData, meshFilter, meshCollider);
+			MeshData meshData = chunkSimplifier.BuildMesh(chunk);
+			chunkSimplifier.RenderMesh(meshData, meshFilter, meshCollider);
 		}
 
 	}
