@@ -28,7 +28,7 @@ namespace Warfest {
 		}
 
 		public void SetVoxel(Pos pos, Voxel.Type type, Color32 color) {
-			colorTexture.AddColor(color);
+//			colorTexture.AddColor(color);
 			chunk.SetVoxel(pos, type, color);
 			Refresh();
 		}

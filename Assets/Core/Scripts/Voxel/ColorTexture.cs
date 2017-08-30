@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+// TODO: Load existing texture at startup.
 namespace Warfest {
 	[ExecuteInEditMode]
 	public class ColorTexture : MonoBehaviour {
