@@ -14,11 +14,11 @@ namespace Warfest {
 		}
 
 		void Update() {
-			if (Input.GetMouseButtonDown(0)) {
+			if (MouseState.IsLocked() && Input.GetMouseButtonDown(0)) {
 				AddVoxel(defaultColor);
 			}
 
-			if (Input.GetMouseButtonDown(1)) {
+			if (MouseState.IsLocked() && Input.GetMouseButtonDown(1)) {
 				RemoveVoxel();
 			}
 		}

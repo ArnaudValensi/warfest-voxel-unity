@@ -65,6 +65,8 @@ public class InventoryUI : MonoBehaviour {
 				OpenActionMenu(false);
 
 				//gameManager.ResumeGame();
+
+				Warfest.MouseState.SetLocked(true);
 			} else {
 				ShowItems();
 				RefreshSlotSelection();
@@ -74,6 +76,8 @@ public class InventoryUI : MonoBehaviour {
 				//blurScript.enabled = true;
 			
 				//gameManager.PauseGame();
+
+				Warfest.MouseState.SetLocked(false);
 			}
 		}
 	}
