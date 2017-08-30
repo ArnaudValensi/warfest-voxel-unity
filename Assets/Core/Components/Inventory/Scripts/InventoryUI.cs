@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-//using UnityStandardAssets.ImageEffects;
+using UnityStandardAssets.ImageEffects;
 using System.Collections.Generic;
 using TMPro;
 
@@ -29,7 +29,7 @@ public class InventoryUI : MonoBehaviour {
 	GameObject inventoryPanelObj;
 	//GameManager gameManager;
 	bool isShown;
-	//MonoBehaviour blurScript;
+	MonoBehaviour blurScript;
 	Inventory inventory;
 	[ReadOnly] public Tab currentTab = Tab.Ingredient;
 	int selectedSlot;
@@ -42,7 +42,7 @@ public class InventoryUI : MonoBehaviour {
 
 	void Start () {
 		inventoryPanelObj = transform.Find("InventoryPanel").gameObject;
-		//blurScript = Camera.main.GetComponent<BlurOptimized>();
+		blurScript = Camera.main.GetComponent<BlurOptimized>();
 		//gameManager = GameObject.Find("/Managers").GetComponent<GameManager>();
 		inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
 
@@ -60,7 +60,7 @@ public class InventoryUI : MonoBehaviour {
 			if (isShown) {
 				isShown = false;
 				inventoryPanelObj.SetActive(false);
-				//blurScript.enabled = false;
+				blurScript.enabled = false;
 
 				OpenActionMenu(false);
 
@@ -73,7 +73,7 @@ public class InventoryUI : MonoBehaviour {
 
 				isShown = true;
 				inventoryPanelObj.SetActive(true);
-				//blurScript.enabled = true;
+				blurScript.enabled = true;
 			
 				//gameManager.PauseGame();
 
