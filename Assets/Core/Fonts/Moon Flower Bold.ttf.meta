@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 6de4f639c09ac4b5bad558a95dd1be95
+timeCreated: 1490921493
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Moon Flower Bold
+  fontNames:
+  - Moon Flower Bold
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
