@@ -34,6 +34,11 @@ namespace Warfest {
 			texture.Apply();
 		}
 
+		public void LoadTexture(Texture2D textureToLoad) {
+			colorIndex = 0;
+			AddColors(textureToLoad.GetPixels32());
+		}
+
 		public void AddColor(Color32 color) {
 			int x = colorIndex % size;
 			int y = colorIndex / size;
@@ -44,18 +49,21 @@ namespace Warfest {
 
 				colorIndex++;
 			}
-
-			// TODO: maybe make it call manually.
-			texture.Apply();
 		}
 
 		public void AddColors(Color32[] colors) {
 			for (int i = 0; i < colors.Length; i++) {
 				AddColor(colors[i]);
 			}
+
+			texture.Apply();
 		}
 
 		public Vector2 GetColorUV(Color32 color) {
+			if (color == Color.black) {
+				Debug.Log("[ColorTexture] black color was asked, should't happen");
+			}
+
 			return colorToUv[color];
 		}
 

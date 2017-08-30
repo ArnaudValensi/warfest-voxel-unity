@@ -251,6 +251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddc022b3803ef470c89eae1e0738e99d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  paletteModel: Palette
 --- !u!114 &114578180958092062
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -8,6 +8,9 @@ namespace Warfest {
 	[ExecuteInEditMode]
 	public class GameResources : MonoBehaviour {
 
+		[SerializeField]
+		string paletteModel = null;
+
 		ChunkSimplifier chunkSimplifier;
 		Dictionary<string, Chunk> models;
 		ColorTexture colorTexture;
@@ -18,8 +21,7 @@ namespace Warfest {
 			chunkSimplifier = GameObject.Find("/Managers/ChunkSimplifier").GetComponent<ChunkSimplifier>();
 			colorTexture = GameObject.Find("/Managers/ColorTexture").GetComponent<ColorTexture>();
 
-			// TODO: check if is at good place.
-			colorTexture.Init();
+			LoadTextureColor();
 		}
 
 		void Awake() {
@@ -27,22 +29,60 @@ namespace Warfest {
 
 		}
 
+		public void BakeTextureFromModel() {
+			if (string.IsNullOrEmpty(paletteModel)) {
+				Debug.Log("[GameResources] BakeTextureFromModel: paletteModel is not defined");
+				return;
+			}
+
+			// Load qbt file
+			string qbtPath = GameConfig.Instance.GetModelsPath() + "/" + paletteModel + ".qbt";
+			QBTFile qbtFile = new QBTFile(qbtPath);
+
+			// Create texture
+			colorTexture.Init();
+			colorTexture.AddColors(qbtFile.Colors.ToArray());
+
+			// Save texture
+			string texturePath = Application.dataPath + "/Core/VoxelModels/Textures/Voxel.png";
+			File.WriteAllBytes(texturePath, colorTexture.Texture.EncodeToPNG());
+			AssetDatabase.Refresh();
+
+			Material material = (Material) (AssetDatabase.LoadAssetAtPath("Assets/Core/VoxelModels/Materials/Voxel.mat", typeof(Material)));
+
+			if (material == null) {
+				throw new UnityException("Null material");
+			}
+
+			material.mainTexture = (Texture2D) (AssetDatabase.LoadAssetAtPath("Assets/Core/VoxelModels/Textures/Voxel.png", typeof(Texture2D)));
+
+			AssetDatabase.SaveAssets();
+
+			Debug.Log(material.name);
+		}
+
+		void LoadTextureColor() {
+			Texture2D bakedTexture = (Texture2D) (AssetDatabase.LoadAssetAtPath("Assets/Core/VoxelModels/Textures/Voxel.png", typeof(Texture2D)));
+
+			if (bakedTexture == null) {
+				Debug.Log("[GameResources] no baked texture to load");
+				return;
+			}
+
+			colorTexture.Init();
+			colorTexture.LoadTexture(bakedTexture);
+		}
+
 		void LoadQbtModels() {
 			models = new Dictionary<string, Chunk>();
 
 			string qbtPath = GameConfig.Instance.GetModelsPath();
 
-//			colorTexture.Init();
-
 			foreach (string file in Directory.GetFiles(qbtPath, "*.qbt")) {
 				string filename = Path.GetFileNameWithoutExtension(file);
 
-				Debug.Log("[GameResources] Loading " + filename);
-
 				QBTFile qbtFile = new QBTFile(file);
 				QBTFile.VoxelData[,,] qbtData = qbtFile.VoxelsData;
-
-				colorTexture.AddColors(qbtFile.Colors.ToArray());
 
 				int sizeX = qbtData.GetLength(0);
 				int sizeY = qbtData.GetLength(1);
@@ -90,47 +130,14 @@ namespace Warfest {
 				Chunk chunk = item.Value;
 				string destPath = "Assets/Core/VoxelModels/Meshes/" + modelName + ".asset";
 
+				Debug.Log("[GameResources] Loading " + modelName);
+
 				MeshData meshData = chunkSimplifier.BuildMesh(chunk);
 				Mesh mesh = chunkSimplifier.CreateMesh(meshData);
 
 				CreateOrReplaceAsset(mesh, destPath);
 				AssetDatabase.SaveAssets();
 			}
-
-			// Save texture
-			string texturePath = Application.dataPath + "/Core/VoxelModels/Textures/Voxel.png";
-			File.WriteAllBytes(texturePath, colorTexture.Texture.EncodeToPNG());
-			AssetDatabase.Refresh();
-
-//			// Assign texture to material
-//			Material material = Resources.Load("Materials/Voxel", typeof(Material)) as Material;
-//			
-
-
-			Material material = (Material) (AssetDatabase.LoadAssetAtPath("Assets/Core/VoxelModels/Materials/Voxel.mat", typeof(Material)));
-
-			if (material == null) {
-				throw new UnityException("Null material");
-			}
-
-			material.mainTexture = (Texture2D) (AssetDatabase.LoadAssetAtPath("Assets/Core/VoxelModels/Textures/Voxel.png", typeof(Texture2D)));
-
-			AssetDatabase.SaveAssets();
-
-			Debug.Log(material.name);
-		}
-
-		public void GeneratePrefab(string modelName) {
-			Debug.Log("[GameResources] GeneratePrefab");
-
-			string destPath = "Assets/Core/VoxelModels/Meshes/" + modelName + ".asset";
-			Chunk chunk = models[modelName];
-
-			MeshData meshData = chunkSimplifier.BuildMesh(chunk);
-			Mesh mesh = chunkSimplifier.CreateMesh(meshData);
-
-			CreateOrReplaceAsset(mesh, destPath);
-			AssetDatabase.SaveAssets();
 		}
 
 		T CreateOrReplaceAsset<T>(T asset, string path) where T:Object {
