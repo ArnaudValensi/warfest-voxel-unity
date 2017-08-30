@@ -33,21 +33,25 @@ namespace Warfest {
 			texture.Apply();
 		}
 
-		public void AddColors(Color32[] colors) {
-			for (int i = 0; i < colors.Length; i++) {
-				int x = colorIndex % size;
-				int y = colorIndex / size;
-				Color32 color = colors[i];
+		public void AddColor(Color32 color) {
+			int x = colorIndex % size;
+			int y = colorIndex / size;
 
-				if (!colorToUv.ContainsKey(color)) {
-					texture.SetPixel(x, y, color);
-					colorToUv.Add(color, new Vector2((float)x / size, (float)y / size));
+			if (!colorToUv.ContainsKey(color)) {
+				texture.SetPixel(x, y, color);
+				colorToUv.Add(color, new Vector2((float)x / size, (float)y / size));
 
-					colorIndex++;
-				}
+				colorIndex++;
 			}
 
+			// TODO: maybe make it call manually.
 			texture.Apply();
+		}
+
+		public void AddColors(Color32[] colors) {
+			for (int i = 0; i < colors.Length; i++) {
+				AddColor(colors[i]);
+			}
 		}
 
 		public Vector2 GetColorUV(Color32 color) {

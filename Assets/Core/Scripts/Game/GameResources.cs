@@ -17,6 +17,9 @@ namespace Warfest {
 
 			chunkSimplifier = GameObject.Find("/Managers/ChunkSimplifier").GetComponent<ChunkSimplifier>();
 			colorTexture = GameObject.Find("/Managers/ColorTexture").GetComponent<ColorTexture>();
+
+			// TODO: check if is at good place.
+			colorTexture.Init();
 		}
 
 		void Awake() {
@@ -29,7 +32,7 @@ namespace Warfest {
 
 			string qbtPath = GameConfig.Instance.GetModelsPath();
 
-			colorTexture.Init();
+//			colorTexture.Init();
 
 			foreach (string file in Directory.GetFiles(qbtPath, "*.qbt")) {
 				string filename = Path.GetFileNameWithoutExtension(file);

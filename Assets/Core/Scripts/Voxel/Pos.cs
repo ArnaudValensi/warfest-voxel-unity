@@ -92,5 +92,22 @@ namespace Warfest {
 			}
 		}
 
+		//returns the position of the chunk containing this block
+		public Pos ContainingChunkCoordinates(int chunkSize) {
+			int x = Mathf.FloorToInt(this.x / (float)chunkSize) * chunkSize;
+			int y = Mathf.FloorToInt(this.y / (float)chunkSize) * chunkSize;
+			int z = Mathf.FloorToInt(this.z / (float)chunkSize) * chunkSize;
+
+			return new Pos(x, y, z);
+		}
+
+		public Pos ToLocalChunkCoordinates(int chunkSize) {
+			int x = this.x - (Mathf.FloorToInt(this.x / (float)chunkSize) * chunkSize);
+			int y = this.y - (Mathf.FloorToInt(this.y / (float)chunkSize) * chunkSize);
+			int z = this.z - (Mathf.FloorToInt(this.z / (float)chunkSize) * chunkSize);
+
+			return new Pos(x, y, z);
+		}
+
 	}
 }
