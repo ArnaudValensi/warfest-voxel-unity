@@ -42,7 +42,7 @@ public class InventoryUI : MonoBehaviour {
 
 	// UI Slots
 	readonly List<GameObject> slots = new List<GameObject>();
-	List<Image> slotImages = new List<Image>();
+	List<Transform> slotMeshHolder = new List<Transform>();
 
 	void Start () {
 		inventoryPanelObj = transform.Find("InventoryPanel").gameObject;
@@ -55,7 +55,7 @@ public class InventoryUI : MonoBehaviour {
 		// Get all slots
 		foreach (Transform child in slotsHolderTransform) {
 			slots.Add(child.gameObject);
-			slotImages.Add(child.GetChild(0).GetComponent<Image>());
+			slotMeshHolder.Add(child.Find("MeshHolder"));
 		}
 	}
 	
@@ -90,13 +90,27 @@ public class InventoryUI : MonoBehaviour {
 		items = GetItemsToShow();
 
 		for (int i = 0; i < slots.Count; i++) {
-			Image slotImage = slotImages[i];
+			Transform meshHolder = slotMeshHolder[i];
 
 			if (i < items.Count) {
-				slotImage.enabled = true;
-				slotImage.sprite = items[i].sprite;
+				meshHolder.gameObject.SetActive(true);
+
+				if (meshHolder.childCount > 0) {
+					Destroy(meshHolder.GetChild(0).gameObject);
+				}
+
+				GameObject modelObj = Instantiate(
+					items[i].prefab.transform.Find("Preview").gameObject,
+					meshHolder
+				);
+				modelObj.layer = gameObject.layer;
+
+				Transform modelTransform = modelObj.transform;
+
+				modelTransform.localScale = new Vector3(30f, 30f, 30f);
+				modelTransform.localRotation = Quaternion.Euler(45f, 45f, 0);
 			} else {
-				slotImage.enabled = false;
+				meshHolder.gameObject.SetActive(false);
 			}
 		}
 	}
@@ -192,7 +206,11 @@ public class InventoryUI : MonoBehaviour {
 			if (!previewMeshHolder.activeSelf) {
 				previewMeshHolder.SetActive(true);
 			}
-			Destroy(previewMeshHolder.transform.GetChild(0).gameObject);
+
+			if (previewMeshHolder.transform.childCount > 0) {
+				Destroy(previewMeshHolder.transform.GetChild(0).gameObject);
+			}
+
 			GameObject previewObj = Instantiate(
 				selectedItem.prefab.transform.Find("Preview").gameObject,
 				previewMeshHolder.transform
