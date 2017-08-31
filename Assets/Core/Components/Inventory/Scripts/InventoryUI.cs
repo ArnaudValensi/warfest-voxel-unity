@@ -25,6 +25,8 @@ public class InventoryUI : MonoBehaviour {
 	public GameObject actionMenu;
 	// Action menu selection
 	public Transform actionMenuSelectionTransform;
+	// Camera to add blur on
+	public Camera blurCamera;
 
 	GameObject inventoryPanelObj;
 	//GameManager gameManager;
@@ -42,7 +44,7 @@ public class InventoryUI : MonoBehaviour {
 
 	void Start () {
 		inventoryPanelObj = transform.Find("InventoryPanel").gameObject;
-		blurScript = Camera.main.GetComponent<BlurOptimized>();
+		blurScript = blurCamera.GetComponent<BlurOptimized>();
 		//gameManager = GameObject.Find("/Managers").GetComponent<GameManager>();
 		inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
 
