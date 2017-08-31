@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using UnityStandardAssets.ImageEffects;
 using System.Collections.Generic;
 using TMPro;
@@ -37,6 +36,7 @@ public class InventoryUI : MonoBehaviour {
 	Inventory inventory;
 	[ReadOnly] public Tab currentTab = Tab.Ingredient;
 	int selectedSlot;
+	int equipedSlot;
 	List<Item> items;
 	bool isActionMenuOpen;
 
@@ -248,6 +248,12 @@ public class InventoryUI : MonoBehaviour {
 
 		inventory.EquipItem(items[selectedSlot]);
 		OpenActionMenu(false);
+
+		// Display equiped icon
+		Transform equipedSlotTransform = slots[equipedSlot].transform.Find("SlotEquiped");
+
+		equipedSlotTransform.SetParent(slots[selectedSlot].transform, false);
+		equipedSlot = selectedSlot;
 	}
 
 	// On action menu cancel clicked
