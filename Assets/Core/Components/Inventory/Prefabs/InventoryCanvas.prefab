@@ -1865,6 +1865,7 @@ MonoBehaviour:
   actionMenu: {fileID: 1620718107385758}
   actionMenuSelectionTransform: {fileID: 224795867463857554}
   blurCamera: {fileID: 0}
+  previewMeshHolder: {fileID: 1348954200443900}
   currentTab: 2
 --- !u!114 &114082629177382638
 MonoBehaviour:

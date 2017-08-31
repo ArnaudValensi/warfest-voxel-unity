@@ -15,5 +15,5 @@ MonoBehaviour:
   itemName: Block 2
   itemDescription: A simple block.
   sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-  prefab: {fileID: 1826043952831596, guid: dab8bb7d09ca74b67a00d6976f92ddce, type: 2}
+  prefab: {fileID: 1826043952831596, guid: 9d6deafdf4ed44e66ae5c22f405e8f7b, type: 2}
   isStackable: 0

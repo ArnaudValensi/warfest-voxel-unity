@@ -27,6 +27,8 @@ public class InventoryUI : MonoBehaviour {
 	public Transform actionMenuSelectionTransform;
 	// Camera to add blur on
 	public Camera blurCamera;
+	// Preview mesh
+	public GameObject previewMeshHolder;
 
 	GameObject inventoryPanelObj;
 	//GameManager gameManager;
@@ -181,12 +183,30 @@ public class InventoryUI : MonoBehaviour {
 			itemTitleText.text = selectedItem.itemName;
 			itemDescriptionText.text = selectedItem.itemDescription;
 
+			// Show info panel
 			if (!infoPanel.activeSelf) {
 				infoPanel.SetActive(true);
 			}
+
+			// Show model preview
+			if (!previewMeshHolder.activeSelf) {
+				previewMeshHolder.SetActive(true);
+			}
+			Destroy(previewMeshHolder.transform.GetChild(0).gameObject);
+			GameObject previewObj = Instantiate(
+				selectedItem.prefab.transform.Find("Preview").gameObject,
+				previewMeshHolder.transform
+			);
+			previewObj.layer = gameObject.layer;
 		} else {
+			// Hide info panel
 			if (infoPanel.activeSelf) {
 				infoPanel.SetActive(false);
+			}
+
+			// Hide model preview
+			if (previewMeshHolder.activeSelf) {
+				previewMeshHolder.SetActive(false);
 			}
 		}
 	}
