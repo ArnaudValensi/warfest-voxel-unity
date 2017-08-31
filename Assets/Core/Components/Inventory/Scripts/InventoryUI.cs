@@ -202,6 +202,14 @@ public class InventoryUI : MonoBehaviour {
 		actionMenu.SetActive(open);
 	}
 
+	// On action menu equip clicked
+	public void OnEquipActionMenu() {
+		Debug.Log("[InventoryUI] OnEquipActionMenu");
+
+		inventory.EquipItem(items[selectedSlot]);
+		OpenActionMenu(false);
+	}
+
 	// On action menu cancel clicked
 	public void OnCloseActionMenu() {
 		OpenActionMenu(false);

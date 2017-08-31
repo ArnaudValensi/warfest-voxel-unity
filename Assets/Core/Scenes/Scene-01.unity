@@ -6872,6 +6872,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   items:
   - {fileID: 11400000, guid: 61a92016dd09a48b3bdfd288deea18f8, type: 2}
+  - {fileID: 11400000, guid: c4e185501ea004305a6b0f7d532a0716, type: 2}
+  - {fileID: 11400000, guid: c8e0dbfc4d46048108b07628525375b6, type: 2}
 --- !u!114 &1195236347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10651,6 +10653,16 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114226293918554216, guid: 57ecde3ef2b544f62b31de744d0ca0b2,
+        type: 2}
+      propertyPath: m_Delegates.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114226293918554216, guid: 57ecde3ef2b544f62b31de744d0ca0b2,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 224693050145544960, guid: 57ecde3ef2b544f62b31de744d0ca0b2,
         type: 2}
       propertyPath: m_LocalPosition.x
@@ -10774,42 +10786,42 @@ Prefab:
     - target: {fileID: 114978700223337226, guid: 57ecde3ef2b544f62b31de744d0ca0b2,
         type: 2}
       propertyPath: m_havePropertiesChanged
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114978700223337226, guid: 57ecde3ef2b544f62b31de744d0ca0b2,
         type: 2}
       propertyPath: m_isInputParsingRequired
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114864953526368794, guid: 57ecde3ef2b544f62b31de744d0ca0b2,
         type: 2}
       propertyPath: m_havePropertiesChanged
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114864953526368794, guid: 57ecde3ef2b544f62b31de744d0ca0b2,
         type: 2}
       propertyPath: m_isInputParsingRequired
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114310567924323472, guid: 57ecde3ef2b544f62b31de744d0ca0b2,
         type: 2}
       propertyPath: m_havePropertiesChanged
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114310567924323472, guid: 57ecde3ef2b544f62b31de744d0ca0b2,
         type: 2}
       propertyPath: m_isInputParsingRequired
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114038734383525210, guid: 57ecde3ef2b544f62b31de744d0ca0b2,
         type: 2}
       propertyPath: m_havePropertiesChanged
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114038734383525210, guid: 57ecde3ef2b544f62b31de744d0ca0b2,
         type: 2}
       propertyPath: m_isInputParsingRequired
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224279612650529662, guid: 57ecde3ef2b544f62b31de744d0ca0b2,
         type: 2}
@@ -11536,6 +11548,52 @@ Prefab:
       propertyPath: m_textInfo.pageCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114226293918554216, guid: 57ecde3ef2b544f62b31de744d0ca0b2,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114226293918554216, guid: 57ecde3ef2b544f62b31de744d0ca0b2,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114226293918554216, guid: 57ecde3ef2b544f62b31de744d0ca0b2,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[1].eventID
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114226293918554216, guid: 57ecde3ef2b544f62b31de744d0ca0b2,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1990314722}
+    - target: {fileID: 114226293918554216, guid: 57ecde3ef2b544f62b31de744d0ca0b2,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnEquipActionMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 114226293918554216, guid: 57ecde3ef2b544f62b31de744d0ca0b2,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114226293918554216, guid: 57ecde3ef2b544f62b31de744d0ca0b2,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 114226293918554216, guid: 57ecde3ef2b544f62b31de744d0ca0b2,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114226293918554216, guid: 57ecde3ef2b544f62b31de744d0ca0b2,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[1].callback.m_TypeName
+      value: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI, Version=1.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 57ecde3ef2b544f62b31de744d0ca0b2, type: 2}
   m_IsPrefabParent: 0
@@ -11631,6 +11689,12 @@ Transform:
   m_PrefabParentObject: {fileID: 4932934638383790, guid: f48a1cb6e99e0432fb107c7c51d0eb3f,
     type: 2}
   m_PrefabInternal: {fileID: 1006947705}
+--- !u!114 &1990314722 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114060283149380792, guid: 57ecde3ef2b544f62b31de744d0ca0b2,
+    type: 2}
+  m_PrefabInternal: {fileID: 1948061728}
+  m_Script: {fileID: 11500000, guid: fc66edaa6ccd7487a9ac1ed0637314d1, type: 3}
 --- !u!1001 &2001946142
 Prefab:
   m_ObjectHideFlags: 0

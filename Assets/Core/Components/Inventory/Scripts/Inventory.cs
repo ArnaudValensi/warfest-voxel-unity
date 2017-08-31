@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using Warfest;
 
 public class Inventory : MonoBehaviour {
 
@@ -33,6 +34,16 @@ public class Inventory : MonoBehaviour {
 		);
 
 		items.Remove(item);
+	}
+
+	public void EquipItem(Item item) {
+		Debug.Log("[Inventory] EquipItem: " + item);
+
+		ItemBlock itemBlock = item.prefab.GetComponent<ItemBlock>();
+
+		if (itemBlock != null) {
+			GetComponent<EditTerrain>().SetColor(itemBlock.color);
+		}
 	}
 
 }

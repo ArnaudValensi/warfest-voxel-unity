@@ -9,11 +9,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 87978de04fdde4427b5f7dc1e7984e58, type: 3}
-  m_Name: Block1
+  m_Name: Block2
   m_EditorClassIdentifier: 
   type: 2
-  itemName: Block 1
+  itemName: Block 2
   itemDescription: A simple block.
   sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-  prefab: {fileID: 1826043952831596, guid: e3d15f28521c84a3cad9a2edeef1df4d, type: 2}
+  prefab: {fileID: 1826043952831596, guid: dab8bb7d09ca74b67a00d6976f92ddce, type: 2}
   isStackable: 0

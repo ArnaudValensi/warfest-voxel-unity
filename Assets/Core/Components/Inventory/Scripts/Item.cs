@@ -18,4 +18,8 @@ public class Item : ScriptableObject {
 	public GameObject prefab;
 	public bool isStackable;
 
+	public override string ToString() {
+		return itemName;
+	}
+
 }

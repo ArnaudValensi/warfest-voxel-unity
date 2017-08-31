@@ -7,7 +7,7 @@ namespace Warfest {
 		LayerMask hitLayerMask;
 
 		VoxelTerrain voxelTerrain;
-		Color32 defaultColor = new Color32(88, 125, 191, byte.MaxValue);
+		Color32 voxelColor = new Color32(88, 125, 191, byte.MaxValue);
 
 		void Start() {
 			voxelTerrain = GameObject.Find("VoxelTerrain").GetComponent<VoxelTerrain>();
@@ -15,7 +15,7 @@ namespace Warfest {
 
 		void Update() {
 			if (MouseState.IsLocked() && Input.GetMouseButtonDown(0)) {
-				AddVoxel(defaultColor);
+				AddVoxel(voxelColor);
 			}
 
 			if (MouseState.IsLocked() && Input.GetMouseButtonDown(1)) {
@@ -84,6 +84,10 @@ namespace Warfest {
 			}
 
 			return pos;
+		}
+
+		public void SetColor(Color32 color) {
+			voxelColor = color;
 		}
 
 	}
