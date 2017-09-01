@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using System.IO;
-using System;
-using System.Collections.Generic;
 
 namespace Warfest {
 	public class SaveVoxelTerrain : MonoBehaviour {
@@ -19,7 +17,7 @@ namespace Warfest {
 			chunks = transform.Find("Chunks");
 
 			savePath = GameConfig.Instance.GetSavePath();
-			saveFilename = string.Format("{0}/{1}.json", savePath, filename);
+			saveFilename = string.Format("{0}/{1}.bin", savePath, filename);
 		}
 
 		//----------------------------------------------------------------------------
@@ -35,85 +33,63 @@ namespace Warfest {
 			}
 
 			using (var writeStream = File.OpenWrite(saveFilename)) {
-				using (var writer = new StreamWriter(writeStream)) {
-					ChunksData chunksData = GetChunksData(chunks);
-					string json = JsonUtility.ToJson(chunksData, true);
-
-					writer.Write(json);
+				using (var writer = new BinaryWriter(writeStream)) {
+					SaveData(writer, chunks);
 				}
+
 				writeStream.Close();
 			}
 
 			Debug.Log("[SaveVoxelTerrain] voxel terrain saved in: " + saveFilename);
 		}
 
-		ChunksData GetChunksData(Transform chunksTransform) {
-			ChunkData[] chunksData = new ChunkData[chunksTransform.childCount];
+		void SaveData(BinaryWriter writer, Transform chunksTransform) {
+			int nbChunks = chunksTransform.childCount;
 
-			int i = 0;
-			foreach (var chunk in chunks.GetChildren()) {
-				ChunkData chunkData = GetChunkData(chunk);
+			writer.Write(nbChunks);
 
-				chunksData[i] = chunkData;
-				i++;
-			}
+			foreach (var chunkTransform in chunksTransform.GetChildren()) {
+				Chunk chunk = chunkTransform.GetComponent<TerrainChunk>().Chunk;
+				int sizeX = chunk.SizeX;
+				int sizeY = chunk.SizeY;
+				int sizeZ = chunk.SizeZ;
+				Vector3 pos = chunkTransform.position;
+				int posX = (int)pos.x;
+				int posY = (int)pos.y;
+				int posZ = (int)pos.z;
 
-			return new ChunksData {
-				chunks = chunksData
-			};
-		}
+				writer.Write(sizeX);
+				writer.Write(sizeY);
+				writer.Write(sizeZ);
+				writer.Write(posX);
+				writer.Write(posY);
+				writer.Write(posZ);
 
-		ChunkData GetChunkData(Transform chunkTransform) {
-			Chunk chunk = chunkTransform.GetComponent<TerrainChunk>().Chunk;
-			int sizeX = chunk.SizeX;
-			int sizeY = chunk.SizeY;
-			int sizeZ = chunk.SizeZ;
-			Vector3 pos = chunkTransform.position;
-			int x = (int)pos.x;
-			int y = (int)pos.y;
-			int z = (int)pos.z;
+				for (int z = 0; z < sizeZ; z++) {
+					for (int y = 0; y < sizeY; y++) {
+						for (int x = 0; x < sizeX; x++) {
+							Voxel voxel = chunk.voxels[x, y, z];
+							byte type = (byte)voxel.type;
+							byte[] colorArray = SerializeColor32(voxel.color);
 
-			return new ChunkData {
-				sizeX = sizeX,
-				sizeY = sizeY,
-				sizeZ = sizeZ,
-				x = x,
-				y = y,
-				z = z,
-				voxels = GetVoxelsData(chunk.voxels, sizeX, sizeY, sizeZ)
-			};
-		}
-
-		VoxelData[] GetVoxelsData(Voxel[,,] voxels, int sizeX, int sizeY, int sizeZ) {
-			var voxelData = new List<VoxelData>();
-			Voxel voxel;
-			Color32 color;
-			int intColor;
-
-			for (int x = 0; x < sizeX; x++) {
-				for (int y = 0; y < sizeY; y++) {
-					for (int z = 0; z < sizeX; z++) {
-						voxel = voxels[x, y, z];
-						color = voxel.color;
-
-						intColor = color.r << 24;
-						intColor += color.g << 16;
-						intColor += color.b << 8;
-						intColor += color.a;
-
-						if (voxel.type == Voxel.Type.Solid) {
-							Debug.LogFormat("color: " + color);
+							writer.Write(type);
+							writer.Write(colorArray);
 						}
-
-						voxelData.Add(new VoxelData {
-							type = (int)voxel.type,
-							color = intColor
-						});
 					}
 				}
-			}
 
-			return voxelData.ToArray();
+			}
+		}
+
+		byte[] SerializeColor32(Color32 color) {
+			byte[] colorArray = new byte[4];
+
+			colorArray[0] = color.r;
+			colorArray[1] = color.g;
+			colorArray[2] = color.b;
+			colorArray[3] = color.a;
+
+			return colorArray;
 		}
 
 		//----------------------------------------------------------------------------
@@ -129,84 +105,52 @@ namespace Warfest {
 			}
 
 			using (var readStream = File.OpenRead(saveFilename)) {
-				string json;
-
-				using(var reader = new StreamReader(readStream)) {
-					json = reader.ReadToEnd();
-				}
-
-				ChunksData chunksData = JsonUtility.FromJson<ChunksData>(json);
-
-				LoadChunksData(chunksData);
-			}
-		}
-
-		void LoadChunksData(ChunksData chunksData) {
-			ChunkData[] chunks = chunksData.chunks;
-
-			for (int i = 0; i < chunks.Length; i++) {
-				LoadChunkData(chunks[i]);
-			}
-		}
-
-		void LoadChunkData(ChunkData chunkData) {
-			VoxelData[] voxelsData = chunkData.voxels;
-			int sizeX = chunkData.sizeX;
-			int sizeY = chunkData.sizeY;
-			int posX = (int)chunkData.x;
-			int posY = (int)chunkData.y;
-			int posZ = (int)chunkData.z;
-
-			for (int i = 0; i < voxelsData.Length; i++) {
-				VoxelData voxelData = voxelsData[i];
-				Voxel.Type type = (Voxel.Type)voxelData.type;
-
-				if (type == Voxel.Type.Solid) {
-					int intColor = voxelData.color;
-					int z = i % sizeX;
-					int y = (i % (sizeX * sizeY)) / sizeX;
-					int x = i / (sizeX * sizeY);
-					Color32 color = new Color32(
-						(byte)((intColor >> 24) & 0xFF),
-						(byte)((intColor >> 16) & 0xFF),
-						(byte)((intColor >> 8) & 0xFF),
-						(byte)(intColor & 0xFF)
-					);
-
-					Debug.Log(color);
-
-					voxelTerrain.AddVoxel(
-						new Pos(posX + x, posY + y, posZ + z),
-						color
-					);
+				using (var reader = new BinaryReader(readStream)) {
+					LoadData(reader);
 				}
 			}
 		}
 
-		//----------------------------------------------------------------------------
-		// Data
-		//----------------------------------------------------------------------------
+		void LoadData(BinaryReader reader) {
+			int nbChunks = reader.ReadInt32();
 
-		[Serializable]
-		public class ChunksData {
-			public ChunkData[] chunks;
+			for (int i = 0; i < nbChunks; i++) {
+				int sizeX = reader.ReadInt32();
+				int sizeY = reader.ReadInt32();
+				int sizeZ = reader.ReadInt32();
+				int posX = reader.ReadInt32();
+				int posY = reader.ReadInt32();
+				int posZ = reader.ReadInt32();
+
+				for (int z = 0; z < sizeZ; z++) {
+					for (int y = 0; y < sizeY; y++) {
+						for (int x = 0; x < sizeX; x++) {
+							Voxel.Type type = (Voxel.Type)reader.ReadByte();
+							byte[] colorArray = reader.ReadBytes(4);
+
+							if (type == Voxel.Type.Solid) {
+								Color32 color = DeserializeColor32(colorArray);
+
+								Debug.Log("color: " + color);
+
+								voxelTerrain.AddVoxel(
+									new Pos(posX + x, posY + y, posZ + z),
+									color
+								);
+							}
+						}
+					}
+				}
+			}
 		}
 
-		[Serializable]
-		public class ChunkData {
-			public int sizeX;
-			public int sizeY;
-			public int sizeZ;
-			public int x;
-			public int y;
-			public int z;
-			public VoxelData[] voxels;
-		}
-
-		[Serializable]
-		public class VoxelData {
-			public int type;
-			public int color;
+		Color32 DeserializeColor32(byte[] colorArray) {
+			return new Color32(
+				colorArray[0],
+				colorArray[1],
+				colorArray[2],
+				colorArray[3]
+			);
 		}
 
 	}
