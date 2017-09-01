@@ -135,31 +135,14 @@ namespace Warfest {
 				int posY = reader.ReadInt32();
 				int posZ = reader.ReadInt32();
 
-
-				VoxelData[,,] voxelsData = RLEDecode(reader, sizeX, sizeY, sizeZ);
-
-				for (int z = 0; z < sizeZ; z++) {
-					for (int y = 0; y < sizeY; y++) {
-						for (int x = 0; x < sizeX; x++) {
-							VoxelData voxelData = voxelsData[x, y, z];
-
-							if (voxelData.type == Voxel.Type.Solid) {
-								Debug.Log("color: " + voxelData.color);
-
-								voxelTerrain.AddVoxel(
-									new Pos(posX + x, posY + y, posZ + z),
-									voxelData.color
-								);
-							}
-						}
-					}
-				}
+				RLEDecode(reader, sizeX, sizeY, sizeZ, posX, posY, posZ);
 			}
 		}
 
 		// Run Length Encoding Decoding
-		static VoxelData[,,] RLEDecode(BinaryReader binaryReader, int sizeX, int sizeY, int sizeZ) {
-			var voxelsData = new SaveVoxelTerrain.VoxelData[sizeX, sizeY, sizeZ];
+		void RLEDecode(
+			BinaryReader binaryReader, int sizeX, int sizeY, int sizeZ, int posX, int posY, int posZ
+		) {
 			int x = 0;
 			int y = 0;
 			int z = 0;
@@ -176,10 +159,13 @@ namespace Warfest {
 				color = IntToColor32(intColor);
 
 				for (int j = 0; j < count; j++) {
-					voxelsData[x, y, z] = new SaveVoxelTerrain.VoxelData {
-						type = (Voxel.Type)type,
-						color = color
-					};
+					// Add voxel if solid
+					if ((Voxel.Type)type == Voxel.Type.Solid) {
+						voxelTerrain.AddVoxel(
+							new Pos(posX + x, posY + y, posZ + z),
+							color
+						);
+					}
 
 					x = (x + 1) % sizeX;
 
@@ -194,8 +180,6 @@ namespace Warfest {
 					i++;
 				}
 			}
-
-			return voxelsData;
 		}
 
 		static int Color32ToInt(Color32 color) {
@@ -216,11 +200,6 @@ namespace Warfest {
 				(byte)((intColor >> 8) & 0xFF),
 				(byte)(intColor & 0xFF)
 			);
-		}
-
-		public class VoxelData {
-			public Voxel.Type type;
-			public Color32 color;
 		}
 
 	}
