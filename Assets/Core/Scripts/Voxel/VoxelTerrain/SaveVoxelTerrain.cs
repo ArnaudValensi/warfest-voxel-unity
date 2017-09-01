@@ -65,19 +65,7 @@ namespace Warfest {
 				writer.Write(posY);
 				writer.Write(posZ);
 
-				for (int z = 0; z < sizeZ; z++) {
-					for (int y = 0; y < sizeY; y++) {
-						for (int x = 0; x < sizeX; x++) {
-							Voxel voxel = chunk.voxels[x, y, z];
-							byte type = (byte)voxel.type;
-							byte[] colorArray = SerializeColor32(voxel.color);
-
-							writer.Write(type);
-							writer.Write(colorArray);
-						}
-					}
-				}
-
+				RunLengthEncoding.RLEEncode(chunk.voxels, writer, sizeX, sizeY, sizeZ);
 			}
 		}
 
@@ -122,20 +110,20 @@ namespace Warfest {
 				int posY = reader.ReadInt32();
 				int posZ = reader.ReadInt32();
 
+
+				VoxelData[,,] voxelsData = RunLengthEncoding.RLEDecode(reader, sizeX, sizeY, sizeZ);
+
 				for (int z = 0; z < sizeZ; z++) {
 					for (int y = 0; y < sizeY; y++) {
 						for (int x = 0; x < sizeX; x++) {
-							Voxel.Type type = (Voxel.Type)reader.ReadByte();
-							byte[] colorArray = reader.ReadBytes(4);
+							VoxelData voxelData = voxelsData[x, y, z];
 
-							if (type == Voxel.Type.Solid) {
-								Color32 color = DeserializeColor32(colorArray);
-
-								Debug.Log("color: " + color);
+							if (voxelData.type == Voxel.Type.Solid) {
+								Debug.Log("color: " + voxelData.color);
 
 								voxelTerrain.AddVoxel(
 									new Pos(posX + x, posY + y, posZ + z),
-									color
+									voxelData.color
 								);
 							}
 						}
@@ -151,6 +139,11 @@ namespace Warfest {
 				colorArray[2],
 				colorArray[3]
 			);
+		}
+
+		public class VoxelData {
+			public Voxel.Type type;
+			public Color32 color;
 		}
 
 	}
