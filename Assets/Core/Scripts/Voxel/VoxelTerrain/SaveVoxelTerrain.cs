@@ -29,8 +29,6 @@ namespace Warfest {
 		public void Save() {
 			Debug.Log("[SaveVoxelTerrain] Save");
 
-			Transform chunkTransform = chunks.GetChild(0);
-
 			// Create directory if needed
 			if (!Directory.Exists(savePath)) {
 				Directory.CreateDirectory(savePath);
@@ -38,8 +36,8 @@ namespace Warfest {
 
 			using (var writeStream = File.OpenWrite(saveFilename)) {
 				using (var writer = new StreamWriter(writeStream)) {
-					ChunkData chunkData = GetChunkData(chunkTransform, writeStream);
-					string json = JsonUtility.ToJson(chunkData, true);
+					ChunksData chunksData = GetChunksData(chunks);
+					string json = JsonUtility.ToJson(chunksData, true);
 
 					writer.Write(json);
 				}
@@ -47,13 +45,25 @@ namespace Warfest {
 			}
 
 			Debug.Log("[SaveVoxelTerrain] voxel terrain saved in: " + saveFilename);
-
-//			foreach (var chunk in chunks.GetChildren()) {
-//				
-//			}
 		}
 
-		ChunkData GetChunkData(Transform chunkTransform, Stream stream) {
+		ChunksData GetChunksData(Transform chunksTransform) {
+			ChunkData[] chunksData = new ChunkData[chunksTransform.childCount];
+
+			int i = 0;
+			foreach (var chunk in chunks.GetChildren()) {
+				ChunkData chunkData = GetChunkData(chunk);
+
+				chunksData[i] = chunkData;
+				i++;
+			}
+
+			return new ChunksData {
+				chunks = chunksData
+			};
+		}
+
+		ChunkData GetChunkData(Transform chunkTransform) {
 			Chunk chunk = chunkTransform.GetComponent<TerrainChunk>().Chunk;
 			int sizeX = chunk.SizeX;
 			int sizeY = chunk.SizeY;
@@ -125,9 +135,17 @@ namespace Warfest {
 					json = reader.ReadToEnd();
 				}
 
-				ChunkData chunkData = JsonUtility.FromJson<ChunkData>(json);
+				ChunksData chunksData = JsonUtility.FromJson<ChunksData>(json);
 
-				LoadChunkData(chunkData);
+				LoadChunksData(chunksData);
+			}
+		}
+
+		void LoadChunksData(ChunksData chunksData) {
+			ChunkData[] chunks = chunksData.chunks;
+
+			for (int i = 0; i < chunks.Length; i++) {
+				LoadChunkData(chunks[i]);
 			}
 		}
 
@@ -135,7 +153,6 @@ namespace Warfest {
 			VoxelData[] voxelsData = chunkData.voxels;
 			int sizeX = chunkData.sizeX;
 			int sizeY = chunkData.sizeY;
-			int sizeZ = chunkData.sizeZ;
 			int posX = (int)chunkData.x;
 			int posY = (int)chunkData.y;
 			int posZ = (int)chunkData.z;
@@ -169,6 +186,11 @@ namespace Warfest {
 		//----------------------------------------------------------------------------
 		// Data
 		//----------------------------------------------------------------------------
+
+		[Serializable]
+		public class ChunksData {
+			public ChunkData[] chunks;
+		}
 
 		[Serializable]
 		public class ChunkData {
