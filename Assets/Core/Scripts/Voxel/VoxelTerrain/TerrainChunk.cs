@@ -7,6 +7,7 @@ namespace Warfest {
 	public class TerrainChunk : MonoBehaviour {
 
 		Chunk chunk;
+		public Chunk Chunk { get { return chunk; } }
 		MeshFilter meshFilter;
 		MeshCollider meshCollider;
 		MeshRenderer meshRenderer;
