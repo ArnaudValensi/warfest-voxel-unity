@@ -12,7 +12,7 @@ namespace Warfest {
 		MeshCollider meshCollider;
 		MeshRenderer meshRenderer;
 		ColorTexture colorTexture;
-		VoxelMeshBuilder voxelMeshBuilder;
+//		VoxelMeshBuilder voxelMeshBuilder;
 		ChunkSimplifier chunkSimplifier;
 
 		public void Init(int chunkSize) {
@@ -20,7 +20,7 @@ namespace Warfest {
 			meshCollider = GetComponent<MeshCollider>();
 			meshRenderer = GetComponent<MeshRenderer>();
 			colorTexture = GameManager.Instance.GetColorTexture();
-			voxelMeshBuilder = GameManager.Instance.GetVoxelMeshBuilder();
+//			voxelMeshBuilder = GameManager.Instance.GetVoxelMeshBuilder();
 			chunkSimplifier = GameObject.Find("/Managers/ChunkSimplifier").GetComponent<ChunkSimplifier>();
 
 			meshRenderer.sharedMaterial.mainTexture = colorTexture.Texture;

@@ -9160,8 +9160,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95e87ec6b73e74b76ade0fd3b5bee881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapWidth: 128
-  mapHeight: 128
   chunksHodler: {fileID: 1082207248}
   chunkPrefab: {fileID: 1831428509638826, guid: 5f2729d7c18d04bbb9fc26d89c448d71,
     type: 2}

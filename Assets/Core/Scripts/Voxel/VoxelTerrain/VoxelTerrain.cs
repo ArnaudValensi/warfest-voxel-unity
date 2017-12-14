@@ -4,10 +4,10 @@ using System.Collections.Generic;
 namespace Warfest {
 	public class VoxelTerrain : MonoBehaviour {
 
-		[SerializeField]
-		int mapWidth = 128; // 8 chunks of 16 voxels
-		[SerializeField]
-		int mapHeight = 128;
+//		[SerializeField]
+//		int mapWidth = 128; // 8 chunks of 16 voxels
+//		[SerializeField]
+//		int mapHeight = 128;
 
 		[SerializeField]
 		Transform chunksHodler = null;
