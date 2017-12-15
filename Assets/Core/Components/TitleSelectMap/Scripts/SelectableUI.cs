@@ -2,6 +2,9 @@
 
 public class SelectableUI : MonoBehaviour {
 
+	[SerializeField] bool isDisabled = false;
+	public bool IsDisabled { get { return isDisabled; } }
+
 	GameObject selection;
 
 	void Start() {
@@ -9,10 +12,16 @@ public class SelectableUI : MonoBehaviour {
 	}
 
 	public void OnPointerEnter() {
+		if (isDisabled) {
+			return;
+		}
 		selection.SetActive(true);
 	}
 
 	public void OnPointerLeave() {
+		if (isDisabled) {
+			return;
+		}
 		selection.SetActive(false);
 	}
 
