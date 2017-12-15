@@ -12,6 +12,17 @@ public class MapSelectionUI : MonoBehaviour {
 
 	[ReadOnly] public Tab currentTab = Tab.MyWorlds;
 
+	MapInfo[] mapInfos;
+
+	void Start() {
+		mapInfos = new MapInfo[] {
+			new MapInfo("Unicorn island", "...", 32),
+			new MapInfo("Sky land", "...", 32),
+			new MapInfo("Nyan Dog", "...", 32),
+			new MapInfo("The wall paper", "...", 32)
+		};
+	}
+
 	// Tab Switch
 	public void OnMyWorldsClicked() {
 		SwitchToTab(Tab.MyWorlds);
@@ -33,6 +44,18 @@ public class MapSelectionUI : MonoBehaviour {
 		Debug.Log("OnMapClicked");
 
 		// TODO
+	}
+
+	public class MapInfo {
+		public string name;
+		public string description;
+		public int size;
+
+		public MapInfo(string name, string description, int size) {
+			this.name = name;
+			this.description = description;
+			this.size = size;
+		}
 	}
 
 }
