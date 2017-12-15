@@ -503,7 +503,7 @@ GameObject:
   - component: {fileID: 224122326206489130}
   - component: {fileID: 222799295450947286}
   m_Layer: 8
-  m_Name: InventoryTabsPanel
+  m_Name: TabsPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
