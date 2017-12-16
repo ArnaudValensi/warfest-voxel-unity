@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 
 public class MapSelectionUI : MonoBehaviour {
 
@@ -15,6 +16,8 @@ public class MapSelectionUI : MonoBehaviour {
 	[ReadOnly] public Tab currentTab = Tab.MyWorlds;
 
 	MapInfo[] mapInfos;
+	MapSelectionButton[] mapSelectionButtons;
+	int selectedMap = -1;
 
 	void Start() {
 		mapInfos = new [] {
@@ -24,15 +27,32 @@ public class MapSelectionUI : MonoBehaviour {
 			new MapInfo("The wall paper", "9/11/17 20:35 PM")
 		};
 
+		mapSelectionButtons = new MapSelectionButton[mapInfos.Length];
+
+		int i = 0;
 		foreach (var mapInfo in mapInfos) {
 			GameObject newMap = Instantiate(mapPrefab, mapsHolder);
 			MapSelectionButton mapSelectionButton = newMap.GetComponent<MapSelectionButton>();
 
+			mapSelectionButtons[i] = mapSelectionButton;
 			mapSelectionButton.Init(mapInfo.name, mapInfo.date);
+
+			Func<int, Action> CreateClickAction = (index) => () => SelectMap(index);
+
+			mapSelectionButton.OnClicked += CreateClickAction(i);
+
+			i++;
 		}
 	}
 
-	// Tab Switch
+	void SelectMap(int index) {
+		if (selectedMap != -1) {
+			mapSelectionButtons[selectedMap].Unselect();
+		}
+		mapSelectionButtons[index].Select();
+		selectedMap = index;
+	}
+
 	public void OnMyWorldsClicked() {
 		SwitchToTab(Tab.MyWorlds);
 	}
@@ -46,13 +66,6 @@ public class MapSelectionUI : MonoBehaviour {
 		tabSwitcher.SwitchToTab(tab);
 
 		currentTab = tab;
-	}
-
-	// On slot clicked
-	public void OnMapClicked() {
-		Debug.Log("OnMapClicked");
-
-		// TODO
 	}
 
 	public class MapInfo {

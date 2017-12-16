@@ -110,7 +110,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 143450e97be734a9ca1ded24aad22ae8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isSelectable: 1
   isDisabled: 0
 --- !u!114 &114108129498918394
 MonoBehaviour:
@@ -426,8 +425,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 114007214685425742}
-          m_MethodName: Select
+        - m_Target: {fileID: 114480079564568700}
+          m_MethodName: Clicked
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
