@@ -9,18 +9,27 @@ public class MapSelectionUI : MonoBehaviour {
 
 	public Transform mapsHolderTransform;
 	public MapSelectionTabSwitcher tabSwitcher;
+	public Transform mapsHolder;
+	public GameObject mapPrefab;
 
 	[ReadOnly] public Tab currentTab = Tab.MyWorlds;
 
 	MapInfo[] mapInfos;
 
 	void Start() {
-		mapInfos = new MapInfo[] {
-			new MapInfo("Unicorn island", "...", 32),
-			new MapInfo("Sky land", "...", 32),
-			new MapInfo("Nyan Dog", "...", 32),
-			new MapInfo("The wall paper", "...", 32)
+		mapInfos = new [] {
+			new MapInfo("Unicorn island", "9/11/17 20:35 PM"),
+			new MapInfo("Sky land", "9/11/17 20:35 PM"),
+			new MapInfo("Nyan Dog", "9/11/17 20:35 PM"),
+			new MapInfo("The wall paper", "9/11/17 20:35 PM")
 		};
+
+		foreach (var mapInfo in mapInfos) {
+			GameObject newMap = Instantiate(mapPrefab, mapsHolder);
+			MapSelectionButton mapSelectionButton = newMap.GetComponent<MapSelectionButton>();
+
+			mapSelectionButton.Init(mapInfo.name, mapInfo.date);
+		}
 	}
 
 	// Tab Switch
@@ -48,13 +57,11 @@ public class MapSelectionUI : MonoBehaviour {
 
 	public class MapInfo {
 		public string name;
-		public string description;
-		public int size;
+		public string date;
 
-		public MapInfo(string name, string description, int size) {
+		public MapInfo(string name, string date) {
 			this.name = name;
-			this.description = description;
-			this.size = size;
+			this.date = date;
 		}
 	}
 
