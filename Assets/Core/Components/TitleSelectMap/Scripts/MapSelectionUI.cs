@@ -15,18 +15,14 @@ public class MapSelectionUI : MonoBehaviour {
 
 	[ReadOnly] public Tab currentTab = Tab.MyWorlds;
 
-	MapInfo[] mapInfos;
+	WorldInfo[] mapInfos;
 	MapSelectionButton[] mapSelectionButtons;
 	int selectedMap = -1;
+	WorldsManager worldsManager;
 
 	void Start() {
-		mapInfos = new [] {
-			new MapInfo("Unicorn island", "9/11/17 20:35 PM"),
-			new MapInfo("Sky land", "9/11/17 20:35 PM"),
-			new MapInfo("Nyan Dog", "9/11/17 20:35 PM"),
-			new MapInfo("The wall paper", "9/11/17 20:35 PM")
-		};
-
+		worldsManager = GameObject.Find("/Managers/WorldsManager").GetComponent<WorldsManager>();
+		mapInfos = worldsManager.GetWorldList().ToArray();
 		mapSelectionButtons = new MapSelectionButton[mapInfos.Length];
 
 		int i = 0;
