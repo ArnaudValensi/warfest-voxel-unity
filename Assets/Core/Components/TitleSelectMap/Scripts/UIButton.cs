@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using TMPro;
+using UnityEngine.Events;
 
 public class UIButton : MonoBehaviour {
 
 	[SerializeField] bool isEnabledAtStart = true;
+	public UnityEvent onClickValidated;
 
 	TextMeshProUGUI text;
 	bool isEnabled = true;
@@ -31,6 +33,12 @@ public class UIButton : MonoBehaviour {
 
 		text.color = newColor;
 		isEnabled = false;
+	}
+
+	public void OnClick() {
+		if (isEnabled) {
+			onClickValidated.Invoke();
+		}
 	}
 
 }
