@@ -32,9 +32,14 @@ public class WorldsManager : MonoBehaviour {
 	}
 
 	public void CreateWorld(string name) {
+		if (string.IsNullOrEmpty(name)) {
+			throw new UnityException("A name must be specified to create a world");
+		}
 		if (isWorldExists()) {
 			throw new UnityException("A map with the same name already exists");
 		}
+
+		Debug.Log("CreateWorld");
 	}
 
 	public void DeteleWorld() {

@@ -120,6 +120,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114981017702125014, guid: 7159014e77cf04f5690a874382f4c69d,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 224947280963553006, guid: 7159014e77cf04f5690a874382f4c69d,
         type: 2}
       propertyPath: m_LocalPosition.x
@@ -272,7 +277,32 @@ Prefab:
       objectReference: {fileID: 1557745062}
     - target: {fileID: 1026769762165440, guid: 7159014e77cf04f5690a874382f4c69d, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114981017702125014, guid: 7159014e77cf04f5690a874382f4c69d,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114981017702125014, guid: 7159014e77cf04f5690a874382f4c69d,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114981017702125014, guid: 7159014e77cf04f5690a874382f4c69d,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 271858429}
+    - target: {fileID: 114981017702125014, guid: 7159014e77cf04f5690a874382f4c69d,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnInputValueChange
+      objectReference: {fileID: 0}
+    - target: {fileID: 114981017702125014, guid: 7159014e77cf04f5690a874382f4c69d,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7159014e77cf04f5690a874382f4c69d, type: 2}
@@ -388,6 +418,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputField: {fileID: 732513846}
+  buttonCreate: {fileID: 609079176}
 --- !u!1 &372302881
 GameObject:
   m_ObjectHideFlags: 0
@@ -428,6 +459,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c601c59aec6d649b1af11ca7fb829e05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &609079175 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1877057191508582, guid: 7159014e77cf04f5690a874382f4c69d,
+    type: 2}
+  m_PrefabInternal: {fileID: 21582259}
+--- !u!114 &609079176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 609079175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 866ed95eb25b941d88d96eb7c5cb3313, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isEnabledAtStart: 0
 --- !u!114 &732513846 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114981017702125014, guid: 7159014e77cf04f5690a874382f4c69d,
@@ -1096,7 +1144,7 @@ Prefab:
     - target: {fileID: 224273621777312872, guid: 5e8536cb0e52f41dcbad0750d453c3c8,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -17.95
       objectReference: {fileID: 0}
     - target: {fileID: 224904899764903362, guid: 5e8536cb0e52f41dcbad0750d453c3c8,
         type: 2}
@@ -1116,11 +1164,11 @@ Prefab:
     - target: {fileID: 224904899764903362, guid: 5e8536cb0e52f41dcbad0750d453c3c8,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -17.95
       objectReference: {fileID: 0}
     - target: {fileID: 1814127735147502, guid: 5e8536cb0e52f41dcbad0750d453c3c8, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1814127735147502, guid: 5e8536cb0e52f41dcbad0750d453c3c8, type: 2}
       propertyPath: m_Name
