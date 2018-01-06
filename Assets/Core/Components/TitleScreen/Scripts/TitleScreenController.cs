@@ -6,6 +6,12 @@ public class TitleScreenController : MonoBehaviour {
 	[SerializeField] GameObject mapSelectionCanvas;
 	[SerializeField] GameObject newWorldCanvas;
 
+	NewWorldCanvas newWorldCanvasComponent;
+
+	void Start() {
+		newWorldCanvasComponent = newWorldCanvas.GetComponent<NewWorldCanvas>();
+	}
+
 	public void GoToMapSelection() {
 		titleCanvas.SetActive(false);
 		newWorldCanvas.SetActive(false);
@@ -20,6 +26,7 @@ public class TitleScreenController : MonoBehaviour {
 	public void GoToNewWorldCreation() {
 		mapSelectionCanvas.SetActive(false);
 		newWorldCanvas.SetActive(true);
+		newWorldCanvasComponent.OnOpen();
 	}
 
 }
