@@ -3,7 +3,7 @@
 public class SelectableUI : MonoBehaviour {
 
 	[SerializeField] bool isDisabled = false;
-	public bool IsDisabled { get { return isDisabled; } }
+	public bool IsDisabled { get { return isDisabled; } set { isDisabled = value; } }
 
 	GameObject selection;
 

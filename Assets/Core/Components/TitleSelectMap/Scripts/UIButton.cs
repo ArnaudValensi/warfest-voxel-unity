@@ -5,14 +5,16 @@ using UnityEngine.Events;
 public class UIButton : MonoBehaviour {
 
 	[SerializeField] bool isEnabledAtStart = true;
-	public UnityEvent onClickValidated;
+	[SerializeField] UnityEvent onClickValidated;
 
 	TextMeshProUGUI text;
+	SelectableUI selectableUI;
 	bool isEnabled = true;
 	public bool IsEnabled { get { return isEnabled; } }
 
 	void Start() {
 		text = transform.Find("TextMeshPro Text").GetComponent<TextMeshProUGUI>();
+		selectableUI = GetComponent<SelectableUI>();
 
 		if (!isEnabledAtStart) {
 			Disable();
@@ -25,6 +27,7 @@ public class UIButton : MonoBehaviour {
 
 		text.color = newColor;
 		isEnabled = true;
+		selectableUI.IsDisabled = false;
 	}
 
 	public void Disable() {
@@ -33,6 +36,7 @@ public class UIButton : MonoBehaviour {
 
 		text.color = newColor;
 		isEnabled = false;
+		selectableUI.IsDisabled = true;
 	}
 
 	public void OnClick() {
