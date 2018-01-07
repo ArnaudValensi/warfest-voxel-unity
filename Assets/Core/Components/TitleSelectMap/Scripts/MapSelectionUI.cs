@@ -31,7 +31,7 @@ public class MapSelectionUI : MonoBehaviour {
 			MapSelectionButton mapSelectionButton = newMap.GetComponent<MapSelectionButton>();
 
 			mapSelectionButtons[i] = mapSelectionButton;
-			mapSelectionButton.Init(mapInfo.name, mapInfo.date);
+			mapSelectionButton.Init(mapInfo.name, mapInfo.folderName, mapInfo.date);
 
 			Func<int, Action> CreateClickAction = (index) => () => SelectMap(index);
 
