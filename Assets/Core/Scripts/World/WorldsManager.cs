@@ -16,8 +16,9 @@ public class WorldsManager : MonoBehaviour {
 			if (File.Exists(worldJsonPath)) {
 				string worldData = File.ReadAllText(worldJsonPath);
 				var worldJson = JSON.Parse(worldData);
+				string worldFolderName = Path.GetFileName(folder);
 
-				WorldInfo worldInfo = new WorldInfo(worldJson["name"], worldJson["date"]);
+				WorldInfo worldInfo = new WorldInfo(worldJson["name"], worldFolderName, worldJson["date"]);
 				worldList.Add(worldInfo);
 			}
 		}
@@ -25,21 +26,36 @@ public class WorldsManager : MonoBehaviour {
 		return worldList;
 	}
 
-	bool isWorldExists() {
+	bool isWorldExists(string worldName) {
 		List<WorldInfo> worlds = GetWorldList();
 
-		return worlds.FirstOrDefault(world => world.name == name) != null;
+		return worlds.FirstOrDefault(world => world.name == worldName) != null;
 	}
 
-	public void CreateWorld(string name) {
-		if (string.IsNullOrEmpty(name)) {
+	public void CreateWorld(string worldName) {
+		if (string.IsNullOrEmpty(worldName)) {
 			throw new UnityException("A name must be specified to create a world");
 		}
-		if (isWorldExists()) {
-			throw new UnityException("A map with the same name already exists");
+
+		string worldPath = GetWorldFolderNameToCreate(worldName);
+		string worldJsonPath = worldPath + "/world.json";
+		JSONNode worldJson = new JSONObject();
+
+		worldJson["name"] = worldName;
+
+		Directory.CreateDirectory(worldPath);
+		File.WriteAllText(worldJsonPath, worldJson.ToString(2));
+	}
+
+	string GetWorldFolderNameToCreate(string worldName) {
+		string savePath = GameConfig.Instance.GetSavePath();
+		string worldPath = savePath + "/" + worldName;
+
+		while (Directory.Exists(worldPath)) {
+			worldPath += "-";
 		}
 
-		Debug.Log("CreateWorld");
+		return worldPath;
 	}
 
 	public void DeteleWorld() {
