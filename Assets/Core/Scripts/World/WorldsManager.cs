@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using SimpleJSON;
+using System;
 
 public class WorldsManager : MonoBehaviour {
 
@@ -42,6 +43,7 @@ public class WorldsManager : MonoBehaviour {
 		JSONNode worldJson = new JSONObject();
 
 		worldJson["name"] = worldName;
+		worldJson["date"] = DateTime.Now.ToString("dd/MM/yy hh:mm tt");
 
 		Directory.CreateDirectory(worldPath);
 		File.WriteAllText(worldJsonPath, worldJson.ToString(2));
