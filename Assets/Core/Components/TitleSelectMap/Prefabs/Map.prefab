@@ -72,6 +72,7 @@ GameObject:
   - component: {fileID: 224341464377792308}
   - component: {fileID: 222712394012918852}
   - component: {fileID: 114868384499761948}
+  - component: {fileID: 114612485992555006}
   - component: {fileID: 114587328512441078}
   - component: {fileID: 114007214685425742}
   - component: {fileID: 114480079564568700}
@@ -569,6 +570,17 @@ MonoBehaviour:
       m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
         Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   delegates: []
+--- !u!114 &114612485992555006
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1729782088463268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cbd9023a6d4f4d238eb5b1bc4412272, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114716551686584216
 MonoBehaviour:
   m_ObjectHideFlags: 1
