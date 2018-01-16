@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using SimpleJSON;
-using System;
 
 public class WorldsManager : MonoBehaviour {
 
@@ -24,6 +23,8 @@ public class WorldsManager : MonoBehaviour {
 			}
 		}
 
+		worldList.Sort((world1, world2) => DateUtil.CompareStringDate(world2.date, world1.date));
+
 		return worldList;
 	}
 
@@ -43,7 +44,7 @@ public class WorldsManager : MonoBehaviour {
 		JSONNode worldJson = new JSONObject();
 
 		worldJson["name"] = worldName;
-		worldJson["date"] = DateTime.Now.ToString("dd/MM/yy hh:mm tt");
+		worldJson["date"] = DateUtil.GetCurrentStringDate();
 
 		Directory.CreateDirectory(worldPath);
 		File.WriteAllText(worldJsonPath, worldJson.ToString(2));
