@@ -12,7 +12,7 @@ public class UIButton : MonoBehaviour {
 	bool isEnabled = true;
 	public bool IsEnabled { get { return isEnabled; } }
 
-	void Start() {
+	void OnEnable() {
 		text = transform.Find("TextMeshPro Text").GetComponent<TextMeshProUGUI>();
 		selectableUI = GetComponent<SelectableUI>();
 
