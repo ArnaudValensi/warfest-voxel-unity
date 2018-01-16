@@ -20,7 +20,7 @@ public class MapSelectionUI : MonoBehaviour {
 	int selectedMap = -1;
 	WorldsManager worldsManager;
 
-	void Start() {
+	void OnEnable() {
 		worldsManager = GameObject.Find("/Managers/WorldsManager").GetComponent<WorldsManager>();
 		mapInfos = worldsManager.GetWorldList().ToArray();
 		mapSelectionButtons = new MapSelectionButton[mapInfos.Length];
