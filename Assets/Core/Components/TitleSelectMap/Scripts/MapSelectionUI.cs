@@ -25,6 +25,10 @@ public class MapSelectionUI : MonoBehaviour {
 		mapInfos = worldsManager.GetWorldList().ToArray();
 		mapSelectionButtons = new MapSelectionButton[mapInfos.Length];
 
+		foreach (Transform child in mapsHolder) {
+			Destroy(child.gameObject);
+		}
+
 		int i = 0;
 		foreach (var mapInfo in mapInfos) {
 			GameObject newMap = Instantiate(mapPrefab, mapsHolder);
