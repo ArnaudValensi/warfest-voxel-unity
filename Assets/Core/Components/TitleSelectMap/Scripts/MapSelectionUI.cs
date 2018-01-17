@@ -12,6 +12,7 @@ public class MapSelectionUI : MonoBehaviour {
 	public MapSelectionTabSwitcher tabSwitcher;
 	public Transform mapsHolder;
 	public GameObject mapPrefab;
+	[SerializeField] UIButton deleteButton;
 
 	[ReadOnly] public Tab currentTab = Tab.MyWorlds;
 
@@ -21,6 +22,10 @@ public class MapSelectionUI : MonoBehaviour {
 	WorldsManager worldsManager;
 
 	void OnEnable() {
+		LoadWorlds();
+	}
+
+	void LoadWorlds() {
 		worldsManager = GameObject.Find("/Managers/WorldsManager").GetComponent<WorldsManager>();
 		mapInfos = worldsManager.GetWorldList().ToArray();
 		mapSelectionButtons = new MapSelectionButton[mapInfos.Length];
@@ -51,6 +56,7 @@ public class MapSelectionUI : MonoBehaviour {
 		}
 		mapSelectionButtons[index].Select();
 		selectedMap = index;
+		deleteButton.Enable();
 	}
 
 	public void OnMyWorldsClicked() {
@@ -59,6 +65,13 @@ public class MapSelectionUI : MonoBehaviour {
 
 	public void OnCommunityClicked() {
 		SwitchToTab(Tab.Community);
+	}
+
+	public void OnDeleteWorldClicked() {
+		worldsManager.DeteleWorld(mapInfos[selectedMap]);
+		selectedMap = -1;
+		deleteButton.Disable();
+		LoadWorlds();
 	}
 
 	void SwitchToTab(Tab tab) {

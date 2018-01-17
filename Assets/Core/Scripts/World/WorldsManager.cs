@@ -61,8 +61,16 @@ public class WorldsManager : MonoBehaviour {
 		return worldPath;
 	}
 
-	public void DeteleWorld() {
-		throw new UnityException("Not implmented yet");
+	string GetWorldPathFromWorldInfo(WorldInfo worldInfo) {
+		string savePath = GameConfig.Instance.GetSavePath();
+
+		return savePath + "/" + worldInfo.folderName;
+	}
+
+	public void DeteleWorld(WorldInfo worldInfo) {
+		string worldPath = GetWorldPathFromWorldInfo(worldInfo);
+
+		Directory.Delete(worldPath, true);
 	}
 
 	public void LoadWorld() {
