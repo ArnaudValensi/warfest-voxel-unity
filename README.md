@@ -27,10 +27,10 @@ A Youtube video:
 
 ## Controls
 
-WASD: to move
-Left click: to add a block
-Right click: to remove a block
-I: to open the inventory
+- WASD: to move
+- Left click: to add a block
+- Right click: to remove a block
+- I: to open the inventory
 
 If the cursor doesn't lock in the screen, open and close the inventory.
 
