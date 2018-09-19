@@ -22,7 +22,10 @@ I have also implemented infinite terrain generation using some different noises,
 ![Image of Warfest 4](./readme/4.png)
 ![Image of Warfest 5](./readme/5.png)
 
-## Note
+A Youtube video:
+[![Warfest dev 1](http://img.youtube.com/vi/_vJdzRYahTo/0.jpg)](https://www.youtube.com/watch?v=_vJdzRYahTo "Warfest dev 1")
+
+## Controls
 
 WASD: to move
 Left click: to add a block
@@ -30,3 +33,10 @@ Right click: to remove a block
 I: to open the inventory
 
 If the cursor doesn't lock in the screen, open and close the inventory.
+
+## Note
+
+If you have any question on this project or on how to make a voxel engine, or you want to make projects with me or you just want to talk to me, please contact me:
+- FB Messenger: https://www.messenger.com/t/arnaudvalen
+- Twitter (https://twitter.com/ArnaudValensi)
+
