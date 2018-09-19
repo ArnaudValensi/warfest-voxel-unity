@@ -34,6 +34,8 @@ A Youtube video:
 
 If the cursor doesn't lock in the screen, open and close the inventory.
 
+I suggest you to open the scene `Scene-01`.
+
 ## Note
 
 If you have any question on this project or on how to make a voxel engine, or you want to make projects with me or you just want to talk to me, please contact me:
