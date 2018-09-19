@@ -13,3 +13,20 @@ It implements:
 - A player with animations
 - A 3rd person camera with care of walls
 - And probably more stuff
+
+I have also implemented infinite terrain generation using some different noises, but it is in another project. I could add it here if someone needs it.
+
+![Image of Warfest 1](./readme/1.jpg)
+![Image of Warfest 2](./readme/2.jpg)
+![Image of Warfest 3](./readme/3.png)
+![Image of Warfest 4](./readme/4.png)
+![Image of Warfest 5](./readme/5.png)
+
+## Note
+
+WASD: to move
+Left click: to add a block
+Right click: to remove a block
+I: to open the inventory
+
+If the cursor doesn't lock in the screen, open and close the inventory.
